@@ -6,13 +6,14 @@ import { ThemedView } from "@/components/ThemedView";
 import { chain, client } from "@/constants/thirdweb";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { useUserStore } from "@/store";
+import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import {
   ActivityIndicator,
   Image,
   Pressable,
   StyleSheet,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
 import {
   useActiveAccount,
@@ -37,6 +38,10 @@ import {
   inAppWallet,
   preAuthenticate,
 } from "thirdweb/wallets/in-app";
+import * as SecureStore from "expo-secure-store";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
+import { firebaseAuth, firebaseFirestore } from "@/firebaseConfig";
 
 const wallets = [
   inAppWallet({
@@ -71,38 +76,43 @@ export default function Home() {
   console.log("address", address?.address);
 
   useEffect(() => {
-    if (status === "connected" && address) {
-      // handleConnection();
+    if (address?.address && status == "connected") {
+      handleConnection();
     }
   }, [status, address]);
 
-  // const handleConnection = async () => {
-  //   // await SecureStore.deleteItemAsync(`onboarding-${address}`);
-  //   const onboarding = await SecureStore.getItemAsync(`onboarding-${address}`);
-  //   if (!onboarding) {
-  //     return router.push("/onboarding");
-  //   }
-  //   const password = await SecureStore.getItemAsync(`password-${address}`);
-  //   const email = `${address}@ghost.app`;
-  //   await signInWithEmailAndPassword(firebaseAuth, email, password!);
-  //   // get user and set it in the store
-  //   const document = await getDoc(
-  //     doc(firebaseFirestore, "users", firebaseAuth.currentUser!.uid)
-  //   );
-  //   if (document.exists()) {
-  //     const { address, createdAt, username, rounding } = document.data();
-  //     const user = {
-  //       address,
-  //       createdAt,
-  //       username,
-  //       rounding,
-  //     };
-  //     setUser(user);
-  //     router.push("/app/home");
-  //   } else {
-  //     router.push("/onboarding");
-  //   }
-  // };
+  const handleConnection = async () => {
+    // await SecureStore.deleteItemAsync(`onboarding-${address}`);
+    const onboarding = await SecureStore.getItemAsync(
+      `onboarding-${address?.address}`
+    );
+    console.log("onboarding!!", onboarding);
+    if (!onboarding) {
+      return router.push("/onboarding");
+    }
+    const password = await SecureStore.getItemAsync(
+      `password-${address?.address}`
+    );
+    const email = `${address?.address}@ghost.app`;
+    await signInWithEmailAndPassword(firebaseAuth, email, password!);
+    // get user and set it in the store
+    const document = await getDoc(
+      doc(firebaseFirestore, "users", firebaseAuth.currentUser!.uid)
+    );
+    if (document.exists()) {
+      const { address, createdAt, username, rounding } = document.data();
+      const user = {
+        address,
+        createdAt,
+        username,
+        rounding,
+      };
+      setUser(user);
+      router.push("/app/home");
+    } else {
+      router.push("/onboarding");
+    }
+  };
 
   return (
     <ParallaxScrollView

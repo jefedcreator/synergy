@@ -20,7 +20,7 @@ import AppButton from "../components/app-button";
 import {
   AAVE_POOL_ADDRESS,
   usdcContract,
-  usdtContract
+  usdtContract,
 } from "../constants/sepolia";
 import { firebaseAuth, firebaseFirestore } from "../firebaseConfig";
 import { useUserStore } from "../store";
@@ -63,18 +63,31 @@ export default function Onboarding() {
   });
 
   useEffect(() => {
-    if (address && approvalData && approvalData2) {
-      step === 0 && createAccount(address.address);
+    console.log("useEffect triggered");
+    console.log("address:", address?.address);
+    console.log("approvalData:", approvalData);
+    console.log("approvalData2:", approvalData2);
+    console.log("step:", step);
+
+    if (address?.address) {
+      if (step == 0) {
+        console.log("Calling createAccount");
+        createAccount(address?.address);
+      }
     }
-  }, [step, address, approvalData, approvalData2]);
+  }, [step, address?.address, approvalData, approvalData2]);
 
   const createAccount = async (address: string) => {
+    console.log("Creating user...");
     setCreationStatus("Creating user...");
     let password = await SecureStore.getItemAsync(`password-${address}`);
     if (!password) {
       password = generatePassword();
     }
+    console.log("password before", password);
     await SecureStore.setItemAsync(`password-${address}`, password);
+    console.log("password after", password);
+    console.log("currentUser", firebaseAuth.currentUser);
 
     if (!firebaseAuth.currentUser) {
       try {
@@ -84,6 +97,7 @@ export default function Onboarding() {
           password
         );
       } catch (error) {
+        console.log("error", error);
         await signInWithEmailAndPassword(
           firebaseAuth,
           `${address}@ghost.app`,
