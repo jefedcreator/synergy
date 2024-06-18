@@ -86,7 +86,6 @@ export default function Home() {
     const onboarding = await SecureStore.getItemAsync(
       `onboarding-${address?.address}`
     );
-    console.log("onboarding!!", onboarding);
     if (!onboarding) {
       return router.push("/onboarding");
     }

@@ -1,7 +1,62 @@
 import { erc20Abi } from "viem";
-import { base, baseSepolia, sepolia } from "thirdweb/chains";
+import { base, baseSepolia, sepolia as Sepolia } from "thirdweb/chains";
 
-export { sepolia };
+export const sepolia = {
+  ...Sepolia,
+  explorers: [
+    {
+      name: "etherscan-sepolia",
+      url: "https://sepolia.etherscan.io",
+      standard: "EIP3091",
+    },
+    {
+      name: "otterscan-sepolia",
+      url: "https://sepolia.otterscan.io",
+      standard: "EIP3091",
+    },
+  ],
+  blockExplorerUrl: ["https://sepolia.etherscan.io"],
+};
+
+// export const sepolia = {
+//   chain: "ETH",
+//   chainId: 11155111,
+//   id: 11155111,
+//   explorers: [
+//     {
+//       name: "etherscan-sepolia",
+//       url: "https://sepolia.etherscan.io",
+//       standard: "EIP3091",
+//     },
+//     {
+//       name: "otterscan-sepolia",
+//       url: "https://sepolia.otterscan.io",
+//       standard: "EIP3091",
+//     },
+//   ],
+//   faucets: ["http://fauceth.komputing.org?chain=11155111&address=${ADDRESS}"],
+//   features: [],
+//   icon: {
+//     url: "ipfs://QmcxZHpyJa8T4i63xqjPYrZ6tKrt55tZJpbXcjSDKuKaf9/ethereum/512.png",
+//     width: 512,
+//     height: 512,
+//     format: "png",
+//   },
+//   infoURL: "https://sepolia.otterscan.io",
+//   name: "Sepolia",
+//   nativeCurrency: {
+//     name: "Sepolia Ether",
+//     symbol: "ETH",
+//     decimals: 18,
+//   },
+//   networkId: 11155111,
+//   redFlags: [],
+//   rpc: "https://ethereum-sepolia.publicnode.com",
+//   shortName: "sep",
+//   slug: "sepolia",
+//   testnet: true,
+//   title: "Ethereum Testnet Sepolia",
+// };
 
 export const VAULT_ADDRESS = "0x942af163168A6CDed16Df6Df8b125F0278aa2976";
 export const ROUTER_ADDRESS = "0x49b86914d97Db46FF0F771F7bea4f0B28501605b";

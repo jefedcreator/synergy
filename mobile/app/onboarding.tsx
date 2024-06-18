@@ -176,7 +176,7 @@ export default function Onboarding() {
 
   const finishOnboarding = async () => {
     await setFirebaseUsername();
-    await SecureStore.setItemAsync(`onboarding-${address}`, "true");
+    await SecureStore.setItemAsync(`onboarding-${address?.address}`, "true");
     router.push("/app/home");
   };
 
@@ -241,7 +241,7 @@ export default function Onboarding() {
           <AppButton
             text="Complete onboarding"
             variant={username.length > 3 ? "primary" : "disabled"}
-            onPress={() => finishOnboarding()}
+            onPress={finishOnboarding}
           />
         </View>
       )}

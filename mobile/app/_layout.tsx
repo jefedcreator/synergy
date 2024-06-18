@@ -82,22 +82,24 @@ export default function RootLayout() {
   });
 
   return (
-    <ThirdwebProvider>
-      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <PaperProvider
-          settings={{
-            icon: (props) => <Icon {...props} />,
-          }}
-        >
-          <Slot />
-        </PaperProvider>
-        <Toast
-          config={toastConfig}
-          position="top"
-          topOffset={60}
-          visibilityTime={2500}
-        />
-      </ThemeProvider>
-    </ThirdwebProvider>
+    <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
+      <PaperProvider
+        settings={{
+          icon: (props) => <Icon {...props} />,
+        }}
+      >
+        <ThirdwebProvider>
+          <View className="bg-[#201F2D] flex-1">
+            <Slot />
+          </View>
+        </ThirdwebProvider>
+      </PaperProvider>
+      <Toast
+        config={toastConfig}
+        position="top"
+        topOffset={60}
+        visibilityTime={2500}
+      />
+    </ThemeProvider>
   );
 }

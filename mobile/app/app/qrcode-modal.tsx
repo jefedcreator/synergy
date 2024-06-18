@@ -1,14 +1,21 @@
-import { Linking, Share, View, Text, Pressable } from "react-native";
-import { Link, router } from "expo-router";
-import { Appbar } from "react-native-paper";
-import Icon from "react-native-vector-icons/FontAwesome";
-import { useRef, useState } from "react";
-import { SegmentSlider } from "../../components/segment-slider";
-import { Scanner } from "../../components/scanner";
-import QRcode from "../../components/qrcode";
+import { contract, sepolia } from "@/constants/sepolia";
+import { firebaseFirestore } from "@/firebaseConfig";
 import { BarCodeScannedCallback } from "expo-barcode-scanner";
-import { useUserStore } from "../../store/use-user-store";
+import { Link, router } from "expo-router";
+import { doc, setDoc } from "firebase/firestore";
+import { useRef, useState } from "react";
+import { Pressable, Share, Text, View } from "react-native";
+import { ActivityIndicator, Appbar } from "react-native-paper";
+import Toast from "react-native-toast-message";
+import Icon from "react-native-vector-icons/FontAwesome";
+import { prepareContractCall, waitForReceipt } from "thirdweb";
+import { useSendTransaction } from "thirdweb/react";
 import { shortenAddress } from "thirdweb/utils";
+import { parseEther } from "viem";
+import QRcode from "../../components/qrcode";
+import { Scanner } from "../../components/scanner";
+import { SegmentSlider } from "../../components/segment-slider";
+import { useUserStore } from "../../store/use-user-store";
 
 type QRScreenOptions = "PAY ME" | "SCAN";
 
@@ -73,13 +80,65 @@ export default function QRCodeModal({ option }: { option?: QRScreenOptions }) {
 }
 
 function QRScan() {
+  const user = useUserStore((state) => state.user);
   const [handled, setHandled] = useState(false);
+  const { mutateAsync: transfer, isPending: transferLoading } =
+    useSendTransaction();
+  const [loading, setLoading] = useState(false);
+  console.log("url", sepolia);
 
   const handleBarCodeScanned: BarCodeScannedCallback = async ({ data }) => {
     if (handled) return;
+    setLoading(true);
 
-    Linking.openURL("https://google.com");
+    try {
+      console.log("scanned data", data.split(":")[1]);
+      const recipient = data.split(":")[1];
+      
+      const trx: any = prepareContractCall({
+        contract,
+        method: "transfer",
+        params: [recipient, parseEther("0.01")],
+      });
+      const { chain, client, transactionHash } = await transfer(trx);
+      const txreceipt = await waitForReceipt({
+        client,
+        chain,
+        transactionHash,
+      });
+      const transaction = {
+        txHash: txreceipt.transactionHash as string,
+        blockNumber: txreceipt?.blockNumber?.toString(),
+        from: user?.address as string,
+        fromUsername: user?.username,
+        to: recipient,
+        toUsername: "",
+        amount: "0.01",
+        createdAt: new Date().toISOString(),
+      };
+      await setDoc(
+        doc(firebaseFirestore, "transactions", txreceipt.transactionHash),
+        transaction
+      );
+      console.log("Sent!");
+      Toast.show({
+        type: "success",
+        text1: "Success!",
+        text2: "GHO Transfer successful",
+      });
+    } catch (error) {
+      Toast.show({
+        type: "error",
+        text1: "Transfer error!",
+        text2: "GHO Transfer failed",
+      });
+      console.error("error", error);
+    } finally {
+      setLoading(false);
+    }
   };
-
+  if (loading) {
+    return <ActivityIndicator animating={transferLoading} color={"#FFF"} />;
+  }
   return <Scanner handleBarCodeScanned={handleBarCodeScanned} />;
 }

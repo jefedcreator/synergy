@@ -15,10 +15,7 @@ import { ActivityIndicator, IconButton } from "react-native-paper";
 import Toast from "react-native-toast-message";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { balanceOf } from "thirdweb/extensions/erc20";
-import {
-  useConnectedWallets,
-  useReadContract
-} from "thirdweb/react";
+import { useConnectedWallets, useReadContract } from "thirdweb/react";
 import { formatEther } from "viem";
 
 export default function Home() {
@@ -119,7 +116,7 @@ export default function Home() {
         <View className="flex flex-row items-center justify-between">
           <View className="flex flex-row items-center space-x-4 pl-2">
             <Link href={"./settings"}>
-              <Avatar name={user.username.charAt(0).toUpperCase()} />
+              {/* <Avatar name={user!.username.charAt(0).toUpperCase()} /> */}
             </Link>
             <Text className="text-[#C9B3F9] font-black text-3xl italic">
               GHOst
@@ -136,10 +133,10 @@ export default function Home() {
                 <ActivityIndicator animating={true} color={"#FFF"} />
               </View>
             )}
-            {/*<IconButton
-                icon={() => <Icon name="qrcode" color="#FFF" size={24} />}
-                onPress={() => router.push("/app/qrcode-modal")}
-              />*/}
+            <IconButton
+              icon={() => <Icon name="qrcode" color="#FFF" size={24} />}
+              onPress={() => router.push("/app/qrcode-modal")}
+            />
           </View>
         </View>
         <View className="p-14">
