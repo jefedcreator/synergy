@@ -8,14 +8,14 @@ export default function ExportPrivateKeyModal() {
   const isPresented = router.canGoBack();
   return (
     <SafeAreaView
-      className="flex-1 flex-col bg-[#201F2D]"
+      className="flex-1 flex-col bg-[#0052FF]"
       edges={{ top: "off" }}
     >
       {!isPresented && <Link href="../">Dismiss</Link>}
       <Appbar.Header
         elevated={false}
         statusBarHeight={0}
-        className="bg-[#201F2D] text-white"
+        className="bg-[#0052FF] text-white"
       >
         <Appbar.Content
           title="Export private key"

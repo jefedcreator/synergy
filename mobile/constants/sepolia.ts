@@ -1,5 +1,6 @@
 import { erc20Abi } from "viem";
 import { base, baseSepolia, sepolia as Sepolia } from "thirdweb/chains";
+import { clientId } from "./thirdweb";
 
 export const sepolia = {
   ...Sepolia,
@@ -16,6 +17,23 @@ export const sepolia = {
     },
   ],
   blockExplorerUrl: ["https://sepolia.etherscan.io"],
+};
+
+export const basesepolia = {
+  ...baseSepolia,
+  explorers: [
+    {
+      name: "etherscan-sepolia",
+      url: "https://sepolia.basescan.org",
+      standard: "EIP3091",
+    },
+    {
+      name: "otterscan-sepolia",
+      url: "https://sepolia.otterscan.io",
+      standard: "EIP3091",
+    },
+  ],
+  blockExplorerUrl: ["https://sepolia.basescan.org"],
 };
 
 // export const sepolia = {
@@ -69,6 +87,7 @@ export const AUSDT_ADDRESS = "0xAF0F6e8b0Dc5c913bbF4d14c22B4E78Dd14310B6";
 export const USDT_ADDRESS = "0xaA8E23Fb1079EA71e0a56F48a2aA51851D8433D0";
 export const AUSDC_ADDRESS = "0x16dA4541aD1807f4443d92D26044C1147406EB80";
 export const USDC_ADDRESS = "0x94a9D9AC8a22534E3FaCa9F4e7F2E2cf85d5E4C8";
+export const USDC_BASE_ADDRESS = "0x036CbD53842c5426634e7929541eC2318f3dCF7e";
 export const DAI_ADDRESS = "0xFF34B3d4Aee8ddCd6F9AFFFB6Fe49bD371b8a357";
 export const GHO_SEPOLIA_ADDRESS = "0xc4bF5CbDaBE595361438F8c6a187bDc330539c60";
 export const GHO_ASSET_PRICE = 1e8;
@@ -1115,8 +1134,11 @@ export const VAULT_ABI = [
 ] as const;
 
 export const client = {
-  clientId: process.env.EXPO_PUBLIC_TW_CLIENT_ID || "",
-  secretKey: process.env.SECRET,
+  clientId,
+  // clientId: process.env.EXPO_PUBLIC_TW_CLIENT_ID || "",
+  // secretKey: process.env.SECRET,
+  secretKey:
+    "wiTupGp32INS0CRIt1FlldQQZQxMz_tT5xnoN8ySc1SSepOtJDiwJNP2YBq1zr5XXZ8nwOLNkCbO4du0G5xUGg",
 };
 
 export const contract = {
@@ -2849,48 +2871,33 @@ export const aavePoolContract = {
   address: AAVE_POOL_ADDRESS,
   abi: AAVE_POOL_ABI,
   chain: sepolia,
-  client: {
-    clientId: process.env.EXPO_PUBLIC_TW_CLIENT_ID || "",
-    secretKey: process.env.SECRET,
-  },
+  client,
 };
 
 export const vaultContract = {
   address: VAULT_ADDRESS,
   abi: VAULT_ABI,
   chain: sepolia,
-  client: {
-    clientId: process.env.EXPO_PUBLIC_TW_CLIENT_ID || "",
-    secretKey: process.env.SECRET,
-  },
+  client,
 };
 
 export const daiContract = {
   address: DAI_ADDRESS,
   abi: erc20Abi,
   chain: sepolia,
-  client: {
-    clientId: process.env.EXPO_PUBLIC_TW_CLIENT_ID || "",
-    secretKey: process.env.SECRET,
-  },
+  client,
 };
 
 export const usdcContract = {
-  address: USDC_ADDRESS,
+  address: USDC_BASE_ADDRESS,
   abi: erc20Abi,
-  chain: sepolia,
-  client: {
-    clientId: process.env.EXPO_PUBLIC_TW_CLIENT_ID || "",
-    secretKey: process.env.SECRET,
-  },
+  chain: baseSepolia,
+  client,
 };
 
 export const usdtContract = {
   address: USDT_ADDRESS,
   abi: erc20Abi,
-  chain: sepolia,
-  client: {
-    clientId: process.env.EXPO_PUBLIC_TW_CLIENT_ID || "",
-    secretKey: process.env.SECRET,
-  },
+  chain: baseSepolia,
+  client,
 };

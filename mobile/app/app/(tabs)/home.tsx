@@ -1,12 +1,3 @@
-import Avatar from "@/components/avatar";
-import CircularButton from "@/components/circular-button";
-import TransactionsList from "@/components/transactions-list";
-import { contract } from "@/constants/sepolia";
-import { firebaseFirestore } from "@/firebaseConfig";
-import { getUserTransactions } from "@/lib/firestore";
-import { useUserStore } from "@/store";
-import { DBTransaction } from "@/store/interfaces";
-import { useTransactionsStore } from "@/store/use-transactions-store";
 import { Link, Redirect, router, useNavigation } from "expo-router";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import * as React from "react";
@@ -14,17 +5,25 @@ import { ImageBackground, SafeAreaView, Text, View } from "react-native";
 import { ActivityIndicator, IconButton } from "react-native-paper";
 import Toast from "react-native-toast-message";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { balanceOf } from "thirdweb/extensions/erc20";
 import { useConnectedWallets, useReadContract } from "thirdweb/react";
-import { formatEther } from "viem";
+import { formatUnits } from "viem";
+import CircularButton from "../../../components/circular-button";
+import TransactionsList from "../../../components/transactions-list";
+import { usdcContract } from "../../../constants/sepolia";
+import { firebaseFirestore } from "../../../firebaseConfig";
+import { getUserTransactions } from "../../../lib/firestore";
+import { useUserStore } from "../../../store";
+import { DBTransaction } from "../../../store/interfaces";
+import { useTransactionsStore } from "../../../store/use-transactions-store";
 
 export default function Home() {
   const signer = useConnectedWallets();
   const [refreshing, setRefreshing] = React.useState(false);
   const user = useUserStore((state) => state.user);
-  const { data, isLoading, refetch } = useReadContract(balanceOf, {
-    contract,
-    address: user?.address!,
+  const { data, isLoading, refetch } = useReadContract({
+    contract: usdcContract,
+    method: "balanceOf",
+    params: [user?.address!],
   });
 
   const transactions = useTransactionsStore((state) => state.transactions);
@@ -32,9 +31,10 @@ export default function Home() {
     (state) => state.setTransactions
   );
 
-  const balance = formatEther(BigInt(data || 0n));
+  const balance = formatUnits(BigInt(data || 0n), 6);
 
   const navigation = useNavigation();
+  console.log("data", data);
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -111,15 +111,15 @@ export default function Home() {
   }
 
   return (
-    <SafeAreaView className="bg-[#201F2D] flex-1">
-      <View className="flex flex-col px-4 mt-2 bg-[#201F2D]">
+    <SafeAreaView className="bg-[#0052FF] flex-1">
+      <View className="flex flex-col px-4 mt-2 bg-[#0052FF]">
         <View className="flex flex-row items-center justify-between">
           <View className="flex flex-row items-center space-x-4 pl-2">
             <Link href={"./settings"}>
               {/* <Avatar name={user!.username.charAt(0).toUpperCase()} /> */}
             </Link>
-            <Text className="text-[#C9B3F9] font-black text-3xl italic">
-              GHOst
+            <Text className="text-[#C9B3F9] font-black text-xl italic">
+              SYNERGY ⚡️
             </Text>
           </View>
           <View className="flex flex-row items-center space-x-0">

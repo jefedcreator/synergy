@@ -104,9 +104,9 @@ function AmountInput({
   }, []);
 
   // Once we're done, round value to 2 decimal places
-  const onBlur = (e: NativeSyntheticEvent<TextInputEndEditingEventData>) => {
+  const onBlur = (e?: NativeSyntheticEvent<TextInputEndEditingEventData>) => {
     console.log("onBlur");
-    const value = e.nativeEvent.text;
+    const value = e?.nativeEvent.text || strVal;
 
     let newVal = parseLocalFloat(value);
     if (!(newVal >= 0)) {
@@ -138,17 +138,12 @@ function AmountInput({
   const isFocused = useIsFocused();
   if (lagAutoFocus && isFocused) focus();
   if (!isFocused) ref.current?.blur();
-  /*const nav = useNav();
 
-  useEffect(() => {
-    // Re-focus after screen transition animations finish.
-    // This is a workaround for a bug in react-navigation where autoFocus
-    // doesn't persist across screen animations.
-    nav.addListener("transitionEnd", () => {
-      if (lagAutoFocus && isFocused) focus();
-      if (!isFocused) ref.current?.blur();
-    });
-  }, [isFocused, lagAutoFocus]);*/
+  // Handle submission to close keyboard
+  const handleSubmit = () => {
+    ref.current?.blur();
+    onBlur();
+  };
 
   return (
     <TouchableWithoutFeedback onPress={focus}>
@@ -171,6 +166,8 @@ function AmountInput({
           onChangeText={change}
           onEndEditing={onBlur} /* called on blur, works on Android */
           onTouchEnd={focus}
+          onSubmitEditing={handleSubmit}
+          returnKeyType="done"
         />
       </View>
     </TouchableWithoutFeedback>

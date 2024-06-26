@@ -8,10 +8,7 @@ import { prepareContractCall } from "thirdweb";
 import { useReadContract, useSendTransaction } from "thirdweb/react";
 import { formatUnits } from "viem";
 import AppButton from "../../components/app-button";
-import {
-  GHO_SEPOLIA_ADDRESS,
-  aavePoolContract
-} from "../../constants/sepolia";
+import { GHO_SEPOLIA_ADDRESS, aavePoolContract } from "../../constants/sepolia";
 import { firebaseFirestore } from "../../firebaseConfig";
 import { useUserStore } from "../../store";
 
@@ -130,12 +127,12 @@ export default function BorrowModal() {
   };
 
   return (
-    <View className="flex-1 flex-col px-4 bg-[#201F2D]">
+    <View className="flex-1 flex-col px-4 bg-[#0052FF]">
       {!isPresented && <Link href="../">Dismiss</Link>}
       <Appbar.Header
         elevated={false}
         statusBarHeight={0}
-        className="bg-[#201F2D] text-white"
+        className="bg-[#0052FF] text-white"
       >
         <Appbar.Content
           title="Borrow GHO"
@@ -159,7 +156,7 @@ export default function BorrowModal() {
         </View>
       ) : (
         <View>
-          {/* <Text className="text-[#53516C] font-semibold mt-8">
+          {/* <Text className="text-[#FFF] font-semibold mt-8">
             Total collateral base (USD)
           </Text>
           <Text className="text-white font-semibold mt-2">
@@ -170,22 +167,20 @@ export default function BorrowModal() {
                 )
               : "0.00"}
           </Text> */}
-          <Text className="text-[#53516C] font-semibold mt-4">
-            Borrowable GHO
-          </Text>
+          <Text className="text-[#FFF] font-semibold mt-4">Borrowable GHO</Text>
           <Text className="text-white font-semibold mt-1 text-lg">
             {userData[2]
               ? parseFloat(formatUnits(userData[2], 8)).toFixed(2)
               : "0.00"}
             GHO
           </Text>
-          {/* <Text className="text-[#53516C] font-semibold mt-4">
+          {/* <Text className="text-[#FFF] font-semibold mt-4">
             Maximum LTV (loan-to-value)
           </Text>
           <Text className="text-white font-semibold mt-2">
             {formatUnits(userData[4], 4)}
           </Text>
-          <Text className="text-[#53516C] font-semibold mt-4">
+          <Text className="text-[#FFF] font-semibold mt-4">
             Health Factor
           </Text>
           <Text className="text-white font-semibold mt-2">
@@ -207,7 +202,7 @@ export default function BorrowModal() {
               />
             )}
           </View>
-          <Text className="text-[#53516C] font-semibold mt-4">
+          <Text className="text-[#FFF] font-semibold mt-4">
             Amount borrowed
           </Text>
           <Text className="text-white font-semibold mt-1 text-lg">

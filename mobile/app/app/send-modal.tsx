@@ -211,16 +211,16 @@ export default function SendModal() {
   };
 
   if (!sendUser) {
-    return <View className="flex-1 flex-col px-4 bg-[#201F2D]"></View>;
+    return <View className="flex-1 flex-col px-4 bg-[#0052FF]"></View>;
   }
 
   return (
-    <View className="flex-1 flex-col px-4 bg-[#201F2D]">
+    <View className="flex-1 flex-col px-4 bg-[#0052FF]">
       {!isPresented && <Link href="../">Dismiss</Link>}
       <Appbar.Header
         elevated={false}
         statusBarHeight={0}
-        className="bg-[#201F2D] text-white"
+        className="bg-[#0052FF] text-white"
       >
         <Appbar.Content
           title="Send GHO"
@@ -242,7 +242,7 @@ export default function SendModal() {
         <Text className="text-white text-lg text-center font-semibold">
           {sendUser?.username}
         </Text>
-        <Text className="text-[#53516C] text-ellipsis">
+        <Text className="text-[#FFF] text-ellipsis">
           {shortenAddress(sendUser?.address || "")}
           {isCrossChain && ` • ${sendUserChain}`}
           {/* {isCrossChain && ` • ${sendUser?.chain}`} */}
@@ -259,7 +259,7 @@ export default function SendModal() {
         {balanceOfLoading ? (
           <ActivityIndicator animating={true} color={"#C9B3F9"} />
         ) : (
-          <Text className="text-[#53516C] font-semibold">
+          <Text className="text-[#FFF] font-semibold">
             ${balance.toFixed(2)} available
           </Text>
         )}

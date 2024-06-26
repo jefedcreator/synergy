@@ -44,7 +44,7 @@ export default function TransactionsList({
   };
   return (
     <>
-      <Text className="text-[#53516C] font-semibold mt-4 mb-2">
+      <Text className="text-[#FFF] font-semibold mt-4 mb-2">
         {withAddress ? "Transactions between you" : "Transaction History"}
       </Text>
       <Divider />

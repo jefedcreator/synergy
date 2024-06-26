@@ -1,4 +1,4 @@
-import { useThemeColor } from "@/hooks/useThemeColor";
+import { useThemeColor } from "../hooks/useThemeColor";
 import React from "react";
 import {
   StyleSheet,

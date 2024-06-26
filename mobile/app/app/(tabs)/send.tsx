@@ -1,6 +1,6 @@
-import Avatar from "@/components/avatar";
-import { firebaseFirestore } from "@/firebaseConfig";
-import { useSendStore, useUserStore } from "@/store";
+import Avatar from "../../../components/avatar";
+import { firebaseFirestore } from "../../../firebaseConfig";
+import { useSendStore, useUserStore } from "../../../store";
 import { router } from "expo-router";
 import {
   and,
@@ -14,9 +14,8 @@ import {
 } from "firebase/firestore";
 import * as React from "react";
 import { Pressable, Text, View } from "react-native";
-import { Appbar, Searchbar } from "react-native-paper";
+import { Appbar, IconButton, Searchbar } from "react-native-paper";
 import Icon from "react-native-vector-icons/FontAwesome";
-
 
 export default function Send() {
   const [searchQuery, setSearchQuery] = React.useState("");
@@ -56,7 +55,7 @@ export default function Send() {
 
   return (
     <>
-      <Appbar.Header className="bg-[#201F2D] text-white">
+      <Appbar.Header className="bg-[#0052FF] text-white">
         <Appbar.BackAction
           onPress={() => router.back()}
           color="#fff"
@@ -68,22 +67,22 @@ export default function Send() {
           titleStyle={{ fontWeight: "bold" }}
         />
       </Appbar.Header>
-      <View className="flex-1 flex-col px-4 bg-[#201F2D]">
+      <View className="flex-1 flex-col px-4 bg-[#0052FF]">
         <Searchbar
           placeholder="Search user, ENS or address..."
           onChangeText={onChangeText}
           value={searchQuery}
-          className="bg-transparent border border-[#53516C] !text-white"
+          className="bg-transparent border border-[#FFF] !text-white"
           iconColor="#C9B3F9"
           autoCapitalize="none"
           autoComplete="off"
           autoCorrect={false}
-          placeholderTextColor={"#53516C"}
+          placeholderTextColor={"#FFF"}
           theme={{ colors: { onSurfaceVariant: "#FFF" } }}
         />
         {searchQuery !== "" && (
           <>
-            <Text className="text-[#53516C] font-semibold mt-8">
+            <Text className="text-[#FFF] font-semibold mt-8">
               Search results
             </Text>
             <View className="flex flex-col space-y-4 mt-4">

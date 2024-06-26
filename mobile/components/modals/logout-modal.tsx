@@ -4,6 +4,7 @@ import AppButton from "../app-button";
 import { firebaseAuth } from "../../firebaseConfig";
 import Spacer from "../spacer";
 import { useDisconnect, useActiveWallet } from "thirdweb/react";
+import { router } from "expo-router";
 
 export default function LogoutModal({
   visible,
@@ -18,7 +19,7 @@ export default function LogoutModal({
   return (
     <Portal>
       <Modal visible={visible} onDismiss={hideModal}>
-        <View className="bg-[#201F2D] rounded-lg p-4 mx-4">
+        <View className="bg-[#0052FF] rounded-lg p-4 mx-4">
           <Text className="text-center text-white">
             Are you sure you want to logout?
           </Text>
@@ -30,9 +31,11 @@ export default function LogoutModal({
             variant="ghost"
             onPress={async () => {
               await firebaseAuth.signOut();
+              console.log("logged out!!");
               if (wallet) {
                 disconnect(wallet);
               }
+              router.push("../");
             }}
           />
           <Spacer h={16} />

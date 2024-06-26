@@ -1,4 +1,4 @@
-import { VAULT_ABI } from "@/constants/sepolia";
+import { VAULT_ABI } from "../../constants/sepolia";
 import { useState } from "react";
 import { ActivityIndicator, Text, View } from "react-native";
 import { Slider } from "react-native-awesome-slider";
@@ -92,7 +92,7 @@ export default function VaultWithdraw({
           bubble={(s) => `${s.toFixed(0)}`}
           theme={{
             disableMinTrackTintColor: "#fff",
-            maximumTrackTintColor: "#53516C",
+            maximumTrackTintColor: "#FFF",
             minimumTrackTintColor: "#C9B3F9",
             cacheTrackTintColor: "#333",
             bubbleBackgroundColor: "#666",

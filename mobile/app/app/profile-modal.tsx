@@ -27,13 +27,13 @@ export default function ProfileModal() {
   );
 
   if (!profileUser) {
-    return <View className="flex-1 flex-col px-4 bg-[#201F2D]"></View>;
+    return <View className="flex-1 flex-col px-4 bg-[#0052FF]"></View>;
   }
 
   return (
-    <View className="flex-1 flex-col px-4 bg-[#201F2D]">
+    <View className="flex-1 flex-col px-4 bg-[#0052FF]">
       {!isPresented && <Link href="../">Dismiss</Link>}
-      <Appbar.Header className="bg-[#201F2D] text-white">
+      <Appbar.Header className="bg-[#0052FF] text-white">
         <Appbar.Content
           title="Account"
           color="#fff"
@@ -55,7 +55,7 @@ export default function ProfileModal() {
           <Text className="text-white text-lg text-center font-semibold">
             {profileUser?.username}
           </Text>
-          <Text className="text-[#53516C] text-ellipsis">
+          <Text className="text-[#FFF] text-ellipsis">
             {shortenAddress(profileUser?.address)}
           </Text>
         </View>

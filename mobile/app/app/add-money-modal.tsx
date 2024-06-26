@@ -14,12 +14,12 @@ export default function AddMoneyModal() {
   const [copied, setCopied] = React.useState(false);
 
   return (
-    <View className="flex-1 flex-col px-4 bg-[#201F2D]">
+    <View className="flex-1 flex-col px-4 bg-[#0052FF]">
       {!isPresented && <Link href="../">Dismiss</Link>}
       <Appbar.Header
         elevated={false}
         statusBarHeight={0}
-        className="bg-[#201F2D] text-white"
+        className="bg-[#0052FF] text-white"
       >
         <Appbar.Content
           title="Add money"
@@ -33,14 +33,14 @@ export default function AddMoneyModal() {
           size={20}
         />
       </Appbar.Header>
-      <Text className="text-[#53516C] font-semibold mt-8">
+      <Text className="text-[#FFF] font-semibold mt-8">
         Add money to account
       </Text>
       <Text className="text-white font-semibold mt-2">
-        Send GHO, USDC, USDT to your address below.
+        Send USDC, USDT to your address below.
       </Text>
       <View className="bg-[#292836] rounded-lg flex flex-row justify-between mt-4 px-4 py-2">
-        <Text className="text-[#53516C] text-ellipsis">
+        <Text className="text-[#FFF] text-ellipsis">
           {shortenAddress(user?.address as string)}
         </Text>
         <Pressable
@@ -55,7 +55,7 @@ export default function AddMoneyModal() {
           <Icon
             name={!copied ? "clipboard" : "check"}
             size={16}
-            color={!copied ? "#53516C" : "green"}
+            color={!copied ? "#FFF" : "green"}
           />
         </Pressable>
       </View>

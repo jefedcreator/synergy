@@ -1,5 +1,5 @@
-import { aavePoolContract, vaultContract } from "@/constants/sepolia";
-import { useUserStore } from "@/store";
+import { aavePoolContract, vaultContract } from "../../../constants/sepolia";
+import { useUserStore } from "../../../store";
 import { Redirect, router, useNavigation } from "expo-router";
 import { useEffect } from "react";
 import { Image, Pressable, Text, View } from "react-native";
@@ -58,7 +58,7 @@ export default function Pocket() {
 
   return (
     <>
-      <Appbar.Header className="bg-[#201F2D] text-white">
+      <Appbar.Header className="bg-[#0052FF] text-white">
         <Appbar.BackAction
           onPress={() => router.back()}
           color="#fff"
@@ -74,7 +74,7 @@ export default function Pocket() {
           onPress={() => router.push("/app/pocket-info-modal")}
         />
       </Appbar.Header>
-      <View className="flex-1 flex-col items-center w-full px-4 bg-[#201F2D]">
+      <View className="flex-1 flex-col items-center w-full px-4 bg-[#0052FF]">
         <View className="px-14">
           <View className="flex flex-col space-y-4 pb-8 pt-4">
             <Text className="text-white font-semibold text-center">
@@ -108,7 +108,7 @@ export default function Pocket() {
               <Text className="text-lg text-emerald-500 font-semibold">
                 1.50%
               </Text>
-              <Text className="text-[#53516C]">APY</Text>
+              <Text className="text-[#FFF]">APY</Text>
             </View>
             <Icon name="chevron-right" size={16} color="#C9B3F9" />
           </View>
@@ -136,7 +136,7 @@ export default function Pocket() {
               <Text className="text-lg text-emerald-500 font-semibold">
                 3.00%
               </Text>
-              <Text className="text-[#53516C]">APY</Text>
+              <Text className="text-[#FFF]">APY</Text>
             </View>
             <Icon name="chevron-right" size={16} color="#C9B3F9" />
           </View>

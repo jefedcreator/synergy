@@ -10,10 +10,7 @@ import { SegmentSlider } from "../../components/segment-slider";
 import Spacer from "../../components/spacer";
 import VaultDeposit from "../../components/vault/deposit";
 import VaultWithdraw from "../../components/vault/withdraw";
-import {
-  contract,
-  vaultContract
-} from "../../constants/sepolia";
+import { contract, vaultContract } from "../../constants/sepolia";
 import { useUserStore } from "../../store";
 
 type VaultScreenOptions = "DEPOSIT" | "WITHDRAW";
@@ -51,19 +48,17 @@ export default function VaultModal({
     params: [user?.address!],
   });
 
-
-
   const isPresented = router.canGoBack();
   return (
     <SafeAreaView
-      className="flex-1 flex-col bg-[#201F2D]"
+      className="flex-1 flex-col bg-[#0052FF]"
       edges={{ top: "off" }}
     >
       {!isPresented && <Link href="../">Dismiss</Link>}
       <Appbar.Header
         elevated={false}
         statusBarHeight={0}
-        className="bg-[#201F2D] text-white"
+        className="bg-[#0052FF] text-white"
       >
         <Appbar.Content
           title="GHO Vault"
@@ -79,7 +74,7 @@ export default function VaultModal({
           size={20}
         />
       </Appbar.Header>
-      <View className="flex flex-col px-4 mt-2 bg-[#201F2D]">
+      <View className="flex flex-col px-4 mt-2 bg-[#0052FF]">
         <View className="px-14 pb-8">
           <Text className="text-white font-semibold text-center mb-4">
             Your Vault balance
@@ -90,7 +85,7 @@ export default function VaultModal({
         </View>
         <View className="flex flex-row items-center justify-around space-x-4">
           <View className="flex flex-col space-y-1 items-center w-48">
-            <Text className="text-[#53516C] font-semibold">Balance</Text>
+            <Text className="text-[#FFF] font-semibold">Balance</Text>
             <Text className="text-white text-2xl font-bold text-center">
               $
               {balanceData
@@ -99,7 +94,7 @@ export default function VaultModal({
             </Text>
           </View>
           <View className="flex flex-col space-y-1 items-center text-center w-48">
-            <Text className="text-[#53516C] font-semibold text-center">
+            <Text className="text-[#FFF] font-semibold text-center">
               Vault Balance
             </Text>
             <Text className="text-white text-2xl font-bold text-center">
@@ -110,7 +105,7 @@ export default function VaultModal({
             </Text>
           </View>
           <View className="flex flex-col space-y-1 items-center w-48">
-            <Text className="text-[#53516C] font-semibold">APY</Text>
+            <Text className="text-[#FFF] font-semibold">APY</Text>
             <Text className="text-white text-2xl font-bold text-center">
               3.00%
             </Text>

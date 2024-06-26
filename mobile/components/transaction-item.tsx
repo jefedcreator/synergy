@@ -2,7 +2,7 @@ import { Pressable, View, Text } from "react-native";
 import { DBTransaction } from "../store/interfaces";
 import { Divider } from "react-native-paper";
 import TimeAgo from "@andordavoti/react-native-timeago";
-import { sepolia } from "../constants/sepolia";
+import { sepolia, basesepolia } from "../constants/sepolia";
 import * as WebBrowser from "expo-web-browser";
 import Avatar from "./avatar";
 import { router } from "expo-router";
@@ -54,11 +54,11 @@ export default function TransactionItem({
               key={`event-${index}`}
               onPress={async () => {
                 await WebBrowser.openBrowserAsync(
-                  `${sepolia.explorers[0].url}/tx/${txHash}`
+                  `${basesepolia.explorers[0].url}/tx/${txHash}`
                 );
               }}
             >
-              <Text className="text-[#53516C]">Click to view detail</Text>
+              <Text className="text-[#FFF]">Click to view detail</Text>
             </Pressable>
           </View>
         </View>
@@ -70,7 +70,7 @@ export default function TransactionItem({
           >
             {!isFrom ? "+" : "-"} ${amount.toFixed(2)}
           </Text>
-          <Text className="text-[#53516C]">
+          <Text className="text-[#FFF]">
             <TimeAgo dateTo={new Date(createdAt)} />
           </Text>
         </View>

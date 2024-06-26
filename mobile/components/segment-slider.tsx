@@ -15,7 +15,7 @@ export function SegmentSlider<T extends string>({
       onValueChange={setTab as (tab: string) => void}
       selectedIndex={tabs.indexOf(tab)}
       backgroundColor="#292836"
-      tintColor="#201F2D"
+      tintColor="#0052FF"
       fontStyle={{ fontSize: 14, color: "#FFFFFF" }}
       activeFontStyle={{ fontSize: 14, color: "#FFFFFF", fontWeight: "600" }}
       style={{ height: 48 }}

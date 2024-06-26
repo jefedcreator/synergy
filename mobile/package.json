@@ -5,8 +5,8 @@
   "scripts": {
     "start": "expo start",
     "reset-project": "node ./scripts/reset-project.js",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
+    "android": "expo run:android",
+    "ios": "expo run:ios",
     "web": "expo start --web",
     "test": "jest --watchAll",
     "lint": "expo lint"
@@ -24,9 +24,10 @@
     "@react-navigation/native": "^6.0.2",
     "@thirdweb-dev/react-native-adapter": "^1.2.0",
     "amazon-cognito-identity-js": "^6.3.12",
-    "expo": "~51.0.13",
+    "expo": "^51.0.0",
     "expo-application": "^5.9.1",
     "expo-barcode-scanner": "^13.0.1",
+    "expo-camera": "~15.0.11",
     "expo-clipboard": "^6.0.3",
     "expo-constants": "~16.0.2",
     "expo-font": "~12.0.7",

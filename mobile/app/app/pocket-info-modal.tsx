@@ -8,14 +8,14 @@ export default function PocketInfoModal() {
   const isPresented = router.canGoBack();
   return (
     <SafeAreaView
-      className="flex-1 flex-col bg-[#201F2D] px-4"
+      className="flex-1 flex-col bg-[#0052FF] px-4"
       edges={{ top: "off" }}
     >
       {!isPresented && <Link href="../">Dismiss</Link>}
       <Appbar.Header
         elevated={false}
         statusBarHeight={0}
-        className="bg-[#201F2D] text-white"
+        className="bg-[#0052FF] text-white"
       >
         <Appbar.Content
           title="How does it work?"

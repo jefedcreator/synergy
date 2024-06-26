@@ -11,10 +11,7 @@ import LendingSupply from "../../components/lending/supply";
 import LendingWithdraw from "../../components/lending/withdraw";
 import { SegmentSlider } from "../../components/segment-slider";
 import Spacer from "../../components/spacer";
-import {
-  aavePoolContract,
-  contract
-} from "../../constants/sepolia";
+import { aavePoolContract, contract } from "../../constants/sepolia";
 import { useUserStore } from "../../store";
 
 type AAVELendingScreenOptions = "SUPPLY" | "WITHDRAW" | "BORROW";
@@ -63,14 +60,14 @@ export default function AAVELendingModal({
   const isPresented = router.canGoBack();
   return (
     <SafeAreaView
-      className="flex-1 flex-col bg-[#201F2D]"
+      className="flex-1 flex-col bg-[#0052FF]"
       edges={{ top: "off" }}
     >
       {!isPresented && <Link href="../">Dismiss</Link>}
       <Appbar.Header
         elevated={false}
         statusBarHeight={0}
-        className="bg-[#201F2D] text-white"
+        className="bg-[#0052FF] text-white"
       >
         <Appbar.Content
           title="AAVE Lending"
@@ -86,7 +83,7 @@ export default function AAVELendingModal({
           size={20}
         />
       </Appbar.Header>
-      <View className="flex flex-col px-4 mt-2 bg-[#201F2D]">
+      <View className="flex flex-col px-4 mt-2 bg-[#0052FF]">
         <View className="px-14 pb-8">
           <Text className="text-white font-semibold text-center mb-4">
             Your AAVE Pool balance
@@ -97,19 +94,19 @@ export default function AAVELendingModal({
         </View>
         <View className="flex flex-row items-center justify-around space-x-4">
           <View className="flex flex-col space-y-1 items-center w-48">
-            <Text className="text-[#53516C] font-semibold">Balance</Text>
+            <Text className="text-[#FFF] font-semibold">Balance</Text>
             <Text className="text-white text-2xl font-bold text-center">
               ${balance ? parseInt(formatEther(balance)).toFixed(2) : 0}
             </Text>
           </View>
           <View className="flex flex-col space-y-1 items-center w-48">
-            <Text className="text-[#53516C] font-semibold">Borrowed</Text>
+            <Text className="text-[#FFF] font-semibold">Borrowed</Text>
             <Text className="text-white text-2xl font-bold text-center">
               ${readableUserBorrowBalance.toFixed(2)}
             </Text>
           </View>
           <View className="flex flex-col space-y-1 items-center w-48">
-            <Text className="text-[#53516C] font-semibold">APY</Text>
+            <Text className="text-[#FFF] font-semibold">APY</Text>
             <Text className="text-white text-2xl font-bold text-center">
               1.50%
             </Text>

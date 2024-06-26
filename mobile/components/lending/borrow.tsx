@@ -3,15 +3,8 @@ import { Text, View } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import Toast from "react-native-toast-message";
 import { ContractOptions, prepareContractCall } from "thirdweb";
-import {
-  useReadContract,
-  useSendTransaction
-} from "thirdweb/react";
-import {
-  erc20Abi,
-  formatUnits,
-  parseEther
-} from "viem";
+import { useReadContract, useSendTransaction } from "thirdweb/react";
+import { erc20Abi, formatUnits, parseEther } from "viem";
 import { AAVE_POOL_ABI, GHO_SEPOLIA_ADDRESS } from "../../constants/sepolia";
 import { useUserStore } from "../../store/use-user-store";
 import { AmountChooser } from "../amount-chooser";
@@ -114,7 +107,7 @@ export default function LendingBorrow({
         <ActivityIndicator animating={true} color={"#C9B3F9"} />
       ) : (
         <>
-          <Text className="text-[#53516C] font-semibold text-center">
+          <Text className="text-[#FFF] font-semibold text-center">
             $
             {userData && userData[2]
               ? parseFloat(formatUnits(userData[2], 8)).toFixed(2)
@@ -122,7 +115,7 @@ export default function LendingBorrow({
             borrowable
           </Text>
           {/* 
-          <Text className="text-[#53516C] font-semibold">
+          <Text className="text-[#FFF] font-semibold">
             ${formatUnits(userData[1], 8)} borrowed
           </Text> */}
         </>

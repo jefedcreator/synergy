@@ -93,14 +93,14 @@ export default function Onboarding() {
       try {
         await createUserWithEmailAndPassword(
           firebaseAuth,
-          `${address}@ghost.app`,
+          `${address}@synergy.app`,
           password
         );
       } catch (error) {
         console.log("error", error);
         await signInWithEmailAndPassword(
           firebaseAuth,
-          `${address}@ghost.app`,
+          `${address}@synergy.app`,
           password
         );
       }
@@ -182,7 +182,7 @@ export default function Onboarding() {
 
   return (
     <View className="flex-1 ">
-      <Appbar.Header className="bg-[#201F2D] text-white">
+      <Appbar.Header className="bg-[#0052FF] text-white">
         <Appbar.Content
           title="Onboarding"
           color="#fff"
@@ -194,7 +194,7 @@ export default function Onboarding() {
           <Text className="text-white font-semibold text-lg text-center">
             Creating your account, this might{"\n"} take a while.
           </Text>
-          <Text className="text-[#53516C] text-center font-medium">
+          <Text className="text-[#FFF] text-center font-medium">
             {creationStatus}
           </Text>
           <ActivityIndicator animating={loading} color={"#C9B3F9"} />
@@ -229,7 +229,7 @@ export default function Onboarding() {
                 </Text>
                 <Switch
                   trackColor={{ false: "black", true: "#C9B3F9" }}
-                  thumbColor={"#201F2D"}
+                  thumbColor={"#0052FF"}
                   ios_backgroundColor="#3e3e3e"
                   onValueChange={toggleSwitch}
                   value={isEnabled}

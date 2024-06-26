@@ -21,6 +21,10 @@ export default function AppLayout() {
         options={{ presentation: "modal", headerShown: false }}
       />
       <Stack.Screen
+        name="transfer-modal"
+        options={{ presentation: "modal", headerShown: false }}
+      />
+      <Stack.Screen
         name="send-modal"
         options={{ presentation: "modal", headerShown: false }}
       />

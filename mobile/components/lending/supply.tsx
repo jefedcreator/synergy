@@ -10,7 +10,7 @@ import {
   AAVE_POOL_ADDRESS,
   DAI_ADDRESS,
   SUPPLY_ROUTER_ADDRESS,
-  daiContract
+  daiContract,
 } from "../../constants/sepolia";
 import { useUserStore } from "../../store/use-user-store";
 import { AmountChooser } from "../amount-chooser";
@@ -170,7 +170,7 @@ export default function LendingSupply({
       {balanceOfLoading ? (
         <ActivityIndicator animating={true} color={"#C9B3F9"} />
       ) : (
-        <Text className="text-[#53516C] font-semibold text-center">
+        <Text className="text-[#FFF] font-semibold text-center">
           ${balance.toFixed(2)} available
         </Text>
       )}

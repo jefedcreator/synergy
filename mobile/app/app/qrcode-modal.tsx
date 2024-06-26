@@ -1,23 +1,26 @@
-import { contract, sepolia } from "@/constants/sepolia";
-import { firebaseFirestore } from "@/firebaseConfig";
-import { BarCodeScannedCallback } from "expo-barcode-scanner";
+import { BarcodeScanningResult, Camera, CameraView } from "expo-camera";
 import { Link, router } from "expo-router";
-import { doc, setDoc } from "firebase/firestore";
-import { useRef, useState } from "react";
-import { Pressable, Share, Text, View } from "react-native";
-import { ActivityIndicator, Appbar } from "react-native-paper";
+import { useEffect, useRef, useState } from "react";
+import {
+  Button,
+  Dimensions,
+  Pressable,
+  Share,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import { Appbar } from "react-native-paper";
 import Toast from "react-native-toast-message";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { prepareContractCall, waitForReceipt } from "thirdweb";
-import { useSendTransaction } from "thirdweb/react";
 import { shortenAddress } from "thirdweb/utils";
-import { parseEther } from "viem";
 import QRcode from "../../components/qrcode";
-import { Scanner } from "../../components/scanner";
 import { SegmentSlider } from "../../components/segment-slider";
 import { useUserStore } from "../../store/use-user-store";
 
 type QRScreenOptions = "PAY ME" | "SCAN";
+
+const { height } = Dimensions.get("window");
 
 export default function QRCodeModal({ option }: { option?: QRScreenOptions }) {
   const isPresented = router.canGoBack();
@@ -26,9 +29,9 @@ export default function QRCodeModal({ option }: { option?: QRScreenOptions }) {
   const tabs = useRef(["PAY ME", "SCAN"] as QRScreenOptions[]).current;
   const title = tab === "PAY ME" ? "Display QR Code" : "Scan QR Code";
   return (
-    <View className="flex-1 flex-col px-4 bg-[#201F2D]">
+    <View className="flex-1 flex-col px-4 bg-[#0052FF]">
       {!isPresented && <Link href="../">Dismiss</Link>}
-      <Appbar.Header className="bg-[#201F2D] text-white">
+      <Appbar.Header className="bg-[#0052FF] text-white">
         <Appbar.Content
           title={title}
           color="#fff"
@@ -78,54 +81,37 @@ export default function QRCodeModal({ option }: { option?: QRScreenOptions }) {
     </View>
   );
 }
-
 function QRScan() {
-  const user = useUserStore((state) => state.user);
-  const [handled, setHandled] = useState(false);
-  const { mutateAsync: transfer, isPending: transferLoading } =
-    useSendTransaction();
-  const [loading, setLoading] = useState(false);
-  console.log("url", sepolia);
+  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
+  const [scanned, setScanned] = useState(false);
+  const [done, setDone] = useState(false);
 
-  const handleBarCodeScanned: BarCodeScannedCallback = async ({ data }) => {
-    if (handled) return;
-    setLoading(true);
+  useEffect(() => {
+    const getCameraPermissions = async () => {
+      const { status } = await Camera.requestCameraPermissionsAsync();
+      setHasPermission(status === "granted");
+    };
 
+    getCameraPermissions();
+  }, []);
+
+  const handleBarCodeScanned = ({ type, data }: BarcodeScanningResult) => {
+    setScanned(true);
+    // alert(`Bar code with type ${type} and data ${data} has been scanned!`);
     try {
       console.log("scanned data", data.split(":")[1]);
       const recipient = data.split(":")[1];
-      
-      const trx: any = prepareContractCall({
-        contract,
-        method: "transfer",
-        params: [recipient, parseEther("0.01")],
-      });
-      const { chain, client, transactionHash } = await transfer(trx);
-      const txreceipt = await waitForReceipt({
-        client,
-        chain,
-        transactionHash,
-      });
-      const transaction = {
-        txHash: txreceipt.transactionHash as string,
-        blockNumber: txreceipt?.blockNumber?.toString(),
-        from: user?.address as string,
-        fromUsername: user?.username,
-        to: recipient,
-        toUsername: "",
-        amount: "0.01",
-        createdAt: new Date().toISOString(),
-      };
-      await setDoc(
-        doc(firebaseFirestore, "transactions", txreceipt.transactionHash),
-        transaction
-      );
-      console.log("Sent!");
-      Toast.show({
-        type: "success",
-        text1: "Success!",
-        text2: "GHO Transfer successful",
-      });
+      if (recipient) {
+        router.push({
+          pathname: "/app/transfer-modal",
+          params: {
+            recipient,
+          },
+        });
+        setDone(true);
+      } else {
+        throw new Error();
+      }
     } catch (error) {
       Toast.show({
         type: "error",
@@ -133,12 +119,48 @@ function QRScan() {
         text2: "GHO Transfer failed",
       });
       console.error("error", error);
-    } finally {
-      setLoading(false);
     }
   };
-  if (loading) {
-    return <ActivityIndicator animating={transferLoading} color={"#FFF"} />;
+
+  if (hasPermission === null) {
+    return <Text>Requesting for camera permission</Text>;
   }
-  return <Scanner handleBarCodeScanned={handleBarCodeScanned} />;
+  if (hasPermission === false) {
+    return <Text>No access to camera</Text>;
+  }
+
+  return (
+    <View style={styles.container}>
+      {!done && (
+        <CameraView
+          onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
+          barcodeScannerSettings={{
+            barcodeTypes: ["qr", "pdf417"],
+          }}
+          style={styles.cameraView}
+        />
+      )}
+      {scanned && (
+        <Button
+          title={"Tap to Scan Again"}
+          onPress={() => {
+            setDone(false);
+            setScanned(false);
+          }}
+        />
+      )}
+    </View>
+  );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "flex-start",
+  },
+  cameraView: {
+    height: height / 2,
+    width: "100%",
+  },
+});

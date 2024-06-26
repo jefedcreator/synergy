@@ -4,17 +4,24 @@ import { ThemedInput } from "@/components/ThemedInput";
 import { ThemedText } from "@/components/ThemedText";
 import { ThemedView } from "@/components/ThemedView";
 import { chain, client } from "@/constants/thirdweb";
+import { firebaseAuth, firebaseFirestore } from "@/firebaseConfig";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { useUserStore } from "@/store";
 import { router } from "expo-router";
+import * as SecureStore from "expo-secure-store";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
+import { ActivityIndicator, IconButton } from "react-native-paper";
 import {
-  ActivityIndicator,
   Image,
   Pressable,
   StyleSheet,
   TouchableOpacity,
+  View,
+  Text,
 } from "react-native";
+import { defineChain } from "thirdweb";
 import {
   useActiveAccount,
   useActiveWallet,
@@ -31,35 +38,45 @@ import {
   InAppWalletSocialAuth,
   Wallet,
   createWallet,
+  embeddedWallet,
   getWalletInfo,
+  smartWallet,
 } from "thirdweb/wallets";
 import {
   getUserEmail,
   inAppWallet,
   preAuthenticate,
 } from "thirdweb/wallets/in-app";
-import * as SecureStore from "expo-secure-store";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { doc, getDoc } from "firebase/firestore";
-import { firebaseAuth, firebaseFirestore } from "@/firebaseConfig";
+
+const smartWalletConfig = {
+  factoryAddress: process.env.EXPO_PUBLIC_TW_FACTORY_ADMIN_ADDRESS,
+  gasless: true,
+};
 
 const wallets = [
   inAppWallet({
     smartAccount: {
       chain,
+      factoryAddress: process.env.EXPO_PUBLIC_TW_FACTORY_ADDRESS,
       sponsorGas: true,
     },
   }),
   createWallet("io.metamask"),
   createWallet("com.coinbase.wallet"),
   createWallet("me.rainbow"),
-  createWallet("com.trustwallet.app"),
-  createWallet("io.zerion.wallet"),
-  createWallet("xyz.argent"),
-  createWallet("com.ledger"),
-  createWallet("com.alphawallet"),
 ];
+
 const externalWallets = wallets.slice(1);
+
+// const chain = defineChain(84532);
+
+// First, connect the personal wallet, which can be any wallet (metamask, embedded, etc.)
+// const personalWallet = embeddedWallet();
+// const peronalAccount = await personalWallet.connect({
+//   client,
+//   chain,
+//   strategy: "google",
+// });
 
 export default function Home() {
   const status = useActiveWalletConnectionStatus();
@@ -86,14 +103,20 @@ export default function Home() {
     const onboarding = await SecureStore.getItemAsync(
       `onboarding-${address?.address}`
     );
+    console.log("onboarding!!", onboarding);
     if (!onboarding) {
       return router.push("/onboarding");
     }
     const password = await SecureStore.getItemAsync(
       `password-${address?.address}`
     );
-    const email = `${address?.address}@ghost.app`;
+    const email = `${address?.address}@synergy.app`;
+    console.log("email", email);
+    console.log("password", password);
+
     await signInWithEmailAndPassword(firebaseAuth, email, password!);
+    console.log("error??");
+
     // get user and set it in the store
     const document = await getDoc(
       doc(firebaseFirestore, "users", firebaseAuth.currentUser!.uid)
@@ -113,21 +136,28 @@ export default function Home() {
     }
   };
 
+  const { isConnecting } = useConnect();
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
-      headerImage={
-        <Image
-          source={require("@/assets/images/title.png")}
-          style={styles.reactLogo}
-        />
-      }
-    >
-      <ThemedView style={styles.titleContainer}>
+    <View className="flex-1 flex-col pt-10 bg-[#0052FF] justify-between">
+      {isConnecting ? (
+        <View className="flex-1 flex-col bg-[#0052FF] items-center justify-center">
+          <ActivityIndicator animating={true} color={"#FFF"} />
+        </View>
+      ) : (
+        <>
+          <View className="flex items-center justify-center">
+            <Text className="text-[#C9B3F9] font-black text-xl italic">
+              SYNERGY ⚡️
+            </Text>
+          </View>
+          <ConnectSection />
+        </>
+      )}
+      {/* <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">Connecting Wallets</ThemedText>
-      </ThemedView>
-      <ConnectSection />
-    </ParallaxScrollView>
+      </ThemedView> */}
+    </View>
   );
 }
 
@@ -142,20 +172,20 @@ function ConnectSection() {
 
   if (autoConnecting) {
     return (
-      <ThemedView style={{ padding: 24 }}>
-        <ActivityIndicator />
-      </ThemedView>
+      <View className="flex-1 flex-col bg-[#0052FF] items-center justify-center">
+        <ActivityIndicator animating={true} color={"#FFF"} />
+      </View>
     );
   }
 
   return (
-    <ThemedView style={styles.stepContainer}>
+    <View style={styles.stepContainer}>
       {wallet ? (
         <>
           <ConnectedSection />
         </>
       ) : (
-        <ThemedView style={{ gap: 16 }}>
+        <ThemedView style={{ gap: 16, padding: 10 }}>
           <ThemedText type="defaultSemiBold">In-app wallet</ThemedText>
           <ConnectInAppWallet />
           <ThemedView style={{ height: 12 }} />
@@ -167,7 +197,7 @@ function ConnectSection() {
           </ThemedView>
         </ThemedView>
       )}
-    </ThemedView>
+    </View>
   );
 }
 
@@ -188,13 +218,36 @@ function ConnectInAppWallet() {
 
 function ConnectWithSocial(props: { auth: InAppWalletSocialAuth }) {
   const bgColor = useThemeColor({}, "tint");
-  const { connect, isConnecting } = useConnect();
+  // const { connect, isConnecting } = useConnect();
   const strategy = props.auth;
+  const { connect, isConnecting } = useConnect({
+    client,
+    accountAbstraction: {
+      chain,
+      factoryAddress: process.env.EXPO_PUBLIC_TW_FACTORY_ADDRESS,
+      sponsorGas: true,
+    },
+  });
+
+  const connectToSmartAccount = async () => {
+    // 2. connect with the admin wallet of the smart account
+    connect(async () => {
+      const wallet = inAppWallet(); // or any other wallet
+      await wallet.connect({
+        client,
+        chain,
+        strategy: "google",
+        redirectUrl: "com.thirdweb.demo://",
+      });
+      return wallet;
+    });
+  };
   const connectInAppWallet = async () => {
     await connect(async () => {
       const wallet = inAppWallet({
         smartAccount: {
           chain,
+          factoryAddress: process.env.EXPO_PUBLIC_TW_FACTORY_ADDRESS,
           sponsorGas: true,
         },
       });
@@ -222,11 +275,12 @@ function ConnectWithSocial(props: { auth: InAppWalletSocialAuth }) {
       }}
     >
       {isConnecting ? (
-        <ActivityIndicator />
+        <ActivityIndicator animating={true} color={"#0052FF"} />
       ) : (
         <TouchableOpacity
           key={strategy}
-          onPress={connectInAppWallet}
+          onPress={connectToSmartAccount}
+          // onPress={connectInAppWallet}
           disabled={isConnecting}
         >
           <Image
@@ -267,9 +321,11 @@ function ConnectWithPhoneNumber() {
       const wallet = inAppWallet({
         smartAccount: {
           chain,
+          factoryAddress: process.env.EXPO_PUBLIC_TW_FACTORY_ADDRESS,
           sponsorGas: true,
         },
       });
+
       await wallet.connect({
         client,
         strategy: "phone",
@@ -373,7 +429,9 @@ function ConnectedSection() {
     chain: activeWallet?.getChain(),
     client,
   });
+
   const [email, setEmail] = useState("");
+
   useEffect(() => {
     const fetchEmail = async () => {
       if (activeWallet?.id === "inApp") {
@@ -500,7 +558,7 @@ const styles = StyleSheet.create({
   },
   stepContainer: {
     gap: 8,
-    marginBottom: 8,
+    marginBottom: 1,
   },
   reactLogo: {
     height: "100%",

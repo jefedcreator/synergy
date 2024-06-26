@@ -104,7 +104,7 @@ export default function VaultDeposit({
       {balanceOfLoading ? (
         <ActivityIndicator animating={true} color={"#C9B3F9"} />
       ) : (
-        <Text className="text-[#53516C] font-semibold text-center">
+        <Text className="text-[#FFF] font-semibold text-center">
           ${balance} available
         </Text>
       )}

@@ -157,7 +157,7 @@ export default function LendingWithdraw({
           bubble={(s) => `${s.toFixed(0)}`}
           theme={{
             disableMinTrackTintColor: "#fff",
-            maximumTrackTintColor: "#53516C",
+            maximumTrackTintColor: "#FFF",
             minimumTrackTintColor: "#C9B3F9",
             cacheTrackTintColor: "#333",
             bubbleBackgroundColor: "#666",

@@ -1,4 +1,3 @@
-import { sepolia } from "@/constants/sepolia";
 import { useColorScheme } from "@/hooks/useColorScheme";
 import {
   DarkTheme,
@@ -6,7 +5,7 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { useFonts } from "expo-font";
-import { Slot, Stack } from "expo-router";
+import { Slot } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect } from "react";
 import { LogBox, View } from "react-native";
@@ -20,7 +19,6 @@ import Toast, {
 } from "react-native-toast-message";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { ThirdwebProvider } from "thirdweb/react";
-import { inAppWallet } from "thirdweb/wallets";
 
 LogBox.ignoreLogs([new RegExp("TypeError:.*")]);
 
@@ -49,7 +47,7 @@ const toastConfig: ToastConfig = {
       {...props}
       style={{ borderLeftColor: "red", backgroundColor: "#21202E" }}
       text1Style={{ color: "white", fontWeight: "bold", fontSize: 16 }}
-      text2Style={{ color: "#53516C" }}
+      text2Style={{ color: "#FFF" }}
     />
   ),
 };
@@ -72,14 +70,6 @@ export default function RootLayout() {
   if (!loaded) {
     return null;
   }
-
-  const wallet = inAppWallet({
-    smartAccount: {
-      chain: sepolia,
-      sponsorGas: true,
-    },
-    hidePrivateKeyExport: true,
-  });
 
   return (
     <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>

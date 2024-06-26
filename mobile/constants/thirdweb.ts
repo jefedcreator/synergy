@@ -1,7 +1,8 @@
 import { createThirdwebClient, getContract } from "thirdweb";
 import { base, baseSepolia } from "thirdweb/chains";
 
-const clientId = process.env.EXPO_PUBLIC_TW_CLIENT_ID!;
+// const clientId = process.env.EXPO_PUBLIC_TW_CLIENT_ID!;
+export const clientId = "17c6b3105f4b38dd43bf1a5f196b88af";
 
 if (!clientId) {
   throw new Error(

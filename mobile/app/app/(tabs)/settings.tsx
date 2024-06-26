@@ -6,13 +6,13 @@ import * as WebBrowser from "expo-web-browser";
 import { useState } from "react";
 import React from "react";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { useUserStore } from "@/store";
+import { useUserStore } from "../../../store";
 import { useConnectedWallets } from "thirdweb/react";
-import Avatar from "@/components/avatar";
+import Avatar from "../../../components/avatar";
 import { shortenAddress } from "thirdweb/utils";
-import AppButton from "@/components/app-button";
-import { sepolia } from "@/constants/sepolia";
-import LogoutModal from "@/components/modals/logout-modal";
+import AppButton from "../../../components/app-button";
+import { sepolia } from "../../../constants/sepolia";
+import LogoutModal from "../../../components/modals/logout-modal";
 
 export default function Settings() {
   const signer = useConnectedWallets();
@@ -28,7 +28,7 @@ export default function Settings() {
 
   return (
     <>
-      <Appbar.Header className="bg-[#201F2D] text-white">
+      <Appbar.Header className="bg-[#0052FF] text-white">
         <Appbar.BackAction
           onPress={() => router.back()}
           color="#fff"
@@ -40,7 +40,7 @@ export default function Settings() {
           titleStyle={{ fontWeight: "bold" }}
         />
       </Appbar.Header>
-      <View className="flex-1 flex-col px-4 bg-[#201F2D]">
+      <View className="flex-1 flex-col px-4 bg-[#0052FF]">
         <View className="flex-1 flex-col px-0 mt-4">
           <View className="flex flex-row space-x-4 items-center mb-8">
             <Avatar name={user.username.charAt(0).toUpperCase()} />
@@ -60,19 +60,17 @@ export default function Settings() {
                     }, 1500);
                   }}
                 >
-                  <Text className="text-[#53516C] mr-2">
+                  <Text className="text-[#FFF] mr-2">
                     {shortenAddress(user.address)}
                   </Text>
                   <Icon
                     name={!copied ? "clipboard" : "check"}
                     size={16}
-                    color={!copied ? "#53516C" : "green"}
+                    color={!copied ? "#FFF" : "green"}
                   />
                 </Pressable>
               </View>
-              <Text className="text-[#53516C] font-semibold">
-                GHO • Sepolia
-              </Text>
+              <Text className="text-[#FFF] font-semibold">GHO • Sepolia</Text>
             </View>
           </View>
           <AppButton
@@ -84,7 +82,7 @@ export default function Settings() {
             }}
             variant="ghost"
           />
-          <Text className="text-[#53516C] font-semibold mt-8">Preferences</Text>
+          <Text className="text-[#FFF] font-semibold mt-8">Preferences</Text>
           <View className="flex flex-row justify-between mt-2">
             <Text className="max-w-[300px] text-white">
               Set aside the remainder of each received transaction rounded to
@@ -93,7 +91,7 @@ export default function Settings() {
             </Text>
             <Switch
               trackColor={{ false: "black", true: "#C9B3F9" }}
-              thumbColor={"#201F2D"}
+              thumbColor={"#0052FF"}
               ios_backgroundColor="#3e3e3e"
               onValueChange={toggleSwitch}
               value={isEnabled}
