@@ -61,7 +61,7 @@ export default function VaultModal({
         className="bg-[#0052FF] text-white"
       >
         <Appbar.Content
-          title="GHO Vault"
+          title="USDC Vault"
           color="#fff"
           titleStyle={{ fontWeight: "bold" }}
         />

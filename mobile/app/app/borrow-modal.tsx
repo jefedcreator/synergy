@@ -72,7 +72,7 @@ export default function BorrowModal() {
       Toast.show({
         type: "success",
         text1: "Success!",
-        text2: "Borrowed GHO successfully.",
+        text2: "Borrowed USDC successfully.",
       });
 
       router.back();
@@ -81,7 +81,7 @@ export default function BorrowModal() {
       Toast.show({
         type: "error",
         text1: "Error!",
-        text2: "Error borrowing GHO. Try again.",
+        text2: "Error borrowing USDC. Try again.",
       });
     }
   };
@@ -113,7 +113,7 @@ export default function BorrowModal() {
       Toast.show({
         type: "success",
         text1: "Success!",
-        text2: "Repayed GHO successfully.",
+        text2: "Repayed USDC successfully.",
       });
       router.back();
     } catch (error) {
@@ -121,7 +121,7 @@ export default function BorrowModal() {
       Toast.show({
         type: "error",
         text1: "Error!",
-        text2: "Error repaying GHO. Try again.",
+        text2: "Error repaying USDC. Try again.",
       });
     }
   };
@@ -135,7 +135,7 @@ export default function BorrowModal() {
         className="bg-[#0052FF] text-white"
       >
         <Appbar.Content
-          title="Borrow GHO"
+          title="Borrow USDC"
           color="#fff"
           titleStyle={{ fontWeight: "bold" }}
         />
@@ -147,7 +147,7 @@ export default function BorrowModal() {
         />
       </Appbar.Header>
       <Text className="text-white font-semibold mt-2 text-lg">
-        Here you can borrow GHO using the collateral that was automatically
+        Here you can borrow USDC using the collateral that was automatically
         deposited by GHOst.
       </Text>
       {isLoading || !userData ? (
@@ -167,12 +167,14 @@ export default function BorrowModal() {
                 )
               : "0.00"}
           </Text> */}
-          <Text className="text-[#FFF] font-semibold mt-4">Borrowable GHO</Text>
+          <Text className="text-[#FFF] font-semibold mt-4">
+            Borrowable USDC
+          </Text>
           <Text className="text-white font-semibold mt-1 text-lg">
             {userData[2]
               ? parseFloat(formatUnits(userData[2], 8)).toFixed(2)
               : "0.00"}
-            GHO
+            USDC
           </Text>
           {/* <Text className="text-[#FFF] font-semibold mt-4">
             Maximum LTV (loan-to-value)
@@ -194,7 +196,7 @@ export default function BorrowModal() {
               <AppButton
                 text={
                   canBorrow
-                    ? `Borrow ${formatUnits(userData[2], 8)} GHO`
+                    ? `Borrow ${formatUnits(userData[2], 8)} USDC`
                     : "Not enough collateral"
                 }
                 variant={canBorrow ? "primary" : "disabled"}
@@ -209,7 +211,7 @@ export default function BorrowModal() {
             {userData[1]
               ? parseFloat(formatUnits(userData[1], 8)).toFixed(2)
               : "0.00"}{" "}
-            GHO
+            USDC
           </Text>
           <View className="mt-4">
             {repayLoading ? (
@@ -220,7 +222,7 @@ export default function BorrowModal() {
                   canRepay
                     ? `Repay ${parseFloat(formatUnits(userData[1], 8)).toFixed(
                         2
-                      )} GHO`
+                      )} USDC`
                     : "Not enough debt"
                 }
                 variant={canRepay ? "primary" : "disabled"}

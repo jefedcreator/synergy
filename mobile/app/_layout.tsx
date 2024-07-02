@@ -1,4 +1,4 @@
-import { useColorScheme } from "@/hooks/useColorScheme";
+import { useColorScheme } from "../hooks/useColorScheme";
 import {
   DarkTheme,
   DefaultTheme,

@@ -1136,9 +1136,7 @@ export const VAULT_ABI = [
 export const client = {
   clientId,
   // clientId: process.env.EXPO_PUBLIC_TW_CLIENT_ID || "",
-  // secretKey: process.env.SECRET,
-  secretKey:
-    "wiTupGp32INS0CRIt1FlldQQZQxMz_tT5xnoN8ySc1SSepOtJDiwJNP2YBq1zr5XXZ8nwOLNkCbO4du0G5xUGg",
+  secretKey: process.env.SECRET,
 };
 
 export const contract = {

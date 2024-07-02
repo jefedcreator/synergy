@@ -1,0 +1,752 @@
+{
+	"compiler": {
+		"version": "0.8.20+commit.a1b79de6"
+	},
+	"language": "Solidity",
+	"output": {
+		"abi": [
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_implementation",
+						"type": "address"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "constructor"
+			},
+			{
+				"inputs": [],
+				"name": "ERC1167FailedCreateClone",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "FeeInvalid",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "FeeTooHigh",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "InvalidPool",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "NotFeeManager",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "NotPauser",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "NotVoter",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "PoolAlreadyExists",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "SameAddress",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "ZeroAddress",
+				"type": "error"
+			},
+			{
+				"inputs": [],
+				"name": "ZeroFee",
+				"type": "error"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "token0",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "token1",
+						"type": "address"
+					},
+					{
+						"indexed": true,
+						"internalType": "bool",
+						"name": "stable",
+						"type": "bool"
+					},
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "pool",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "PoolCreated",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": true,
+						"internalType": "address",
+						"name": "pool",
+						"type": "address"
+					},
+					{
+						"indexed": false,
+						"internalType": "uint256",
+						"name": "fee",
+						"type": "uint256"
+					}
+				],
+				"name": "SetCustomFee",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "feeManager",
+						"type": "address"
+					}
+				],
+				"name": "SetFeeManager",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "bool",
+						"name": "state",
+						"type": "bool"
+					}
+				],
+				"name": "SetPauseState",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "pauser",
+						"type": "address"
+					}
+				],
+				"name": "SetPauser",
+				"type": "event"
+			},
+			{
+				"anonymous": false,
+				"inputs": [
+					{
+						"indexed": false,
+						"internalType": "address",
+						"name": "voter",
+						"type": "address"
+					}
+				],
+				"name": "SetVoter",
+				"type": "event"
+			},
+			{
+				"inputs": [],
+				"name": "MAX_FEE",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "ZERO_FEE_INDICATOR",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"name": "allPools",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "allPoolsLength",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "tokenA",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "tokenB",
+						"type": "address"
+					},
+					{
+						"internalType": "bool",
+						"name": "stable",
+						"type": "bool"
+					}
+				],
+				"name": "createPool",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "pool",
+						"type": "address"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "tokenA",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "tokenB",
+						"type": "address"
+					},
+					{
+						"internalType": "uint24",
+						"name": "fee",
+						"type": "uint24"
+					}
+				],
+				"name": "createPool",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "pool",
+						"type": "address"
+					}
+				],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"name": "customFee",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "feeManager",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "pool",
+						"type": "address"
+					},
+					{
+						"internalType": "bool",
+						"name": "_stable",
+						"type": "bool"
+					}
+				],
+				"name": "getFee",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "tokenA",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "tokenB",
+						"type": "address"
+					},
+					{
+						"internalType": "uint24",
+						"name": "fee",
+						"type": "uint24"
+					}
+				],
+				"name": "getPool",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "tokenA",
+						"type": "address"
+					},
+					{
+						"internalType": "address",
+						"name": "tokenB",
+						"type": "address"
+					},
+					{
+						"internalType": "bool",
+						"name": "stable",
+						"type": "bool"
+					}
+				],
+				"name": "getPool",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "implementation",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "isPaused",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "pool",
+						"type": "address"
+					}
+				],
+				"name": "isPool",
+				"outputs": [
+					{
+						"internalType": "bool",
+						"name": "",
+						"type": "bool"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "pauser",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "pool",
+						"type": "address"
+					},
+					{
+						"internalType": "uint256",
+						"name": "fee",
+						"type": "uint256"
+					}
+				],
+				"name": "setCustomFee",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bool",
+						"name": "_stable",
+						"type": "bool"
+					},
+					{
+						"internalType": "uint256",
+						"name": "_fee",
+						"type": "uint256"
+					}
+				],
+				"name": "setFee",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_feeManager",
+						"type": "address"
+					}
+				],
+				"name": "setFeeManager",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "bool",
+						"name": "_state",
+						"type": "bool"
+					}
+				],
+				"name": "setPauseState",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_pauser",
+						"type": "address"
+					}
+				],
+				"name": "setPauser",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [
+					{
+						"internalType": "address",
+						"name": "_voter",
+						"type": "address"
+					}
+				],
+				"name": "setVoter",
+				"outputs": [],
+				"stateMutability": "nonpayable",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "stableFee",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "volatileFee",
+				"outputs": [
+					{
+						"internalType": "uint256",
+						"name": "",
+						"type": "uint256"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			},
+			{
+				"inputs": [],
+				"name": "voter",
+				"outputs": [
+					{
+						"internalType": "address",
+						"name": "",
+						"type": "address"
+					}
+				],
+				"stateMutability": "view",
+				"type": "function"
+			}
+		],
+		"devdoc": {
+			"errors": {
+				"ERC1167FailedCreateClone()": [
+					{
+						"details": "A clone instance deployment failed."
+					}
+				]
+			},
+			"kind": "dev",
+			"methods": {
+				"createPool(address,address,bool)": {
+					"details": "token order does not matter",
+					"params": {
+						"stable": ".",
+						"tokenA": ".",
+						"tokenB": "."
+					}
+				},
+				"createPool(address,address,uint24)": {
+					"details": "fee is converted to stable booleantoken order does not matter",
+					"params": {
+						"fee": "1 if stable, 0 if volatile, else revert",
+						"tokenA": ".",
+						"tokenB": "."
+					}
+				},
+				"getPool(address,address,bool)": {
+					"params": {
+						"stable": "True if stable, false if volatile",
+						"tokenA": ".",
+						"tokenB": "."
+					}
+				},
+				"getPool(address,address,uint24)": {
+					"details": "fee is converted to stable boolean.",
+					"params": {
+						"fee": "1 if stable, 0 if volatile, else returns address(0)",
+						"tokenA": ".",
+						"tokenB": "."
+					}
+				},
+				"isPool(address)": {
+					"params": {
+						"": "."
+					}
+				},
+				"setCustomFee(address,uint256)": {
+					"details": "A custom fee of zero means the default fee will be used."
+				},
+				"setFee(bool,uint256)": {
+					"details": "Throws if higher than maximum fee.      Throws if fee is zero.",
+					"params": {
+						"_fee": ".",
+						"_stable": "Stable or volatile pool."
+					}
+				},
+				"setVoter(address)": {
+					"details": "Only called once to set to Voter.sol - Voter does not have a function      to call this contract method, so once set it's immutable.      This also follows convention of setVoterAndDistributor() in VotingEscrow.sol",
+					"params": {
+						"_voter": "."
+					}
+				}
+			},
+			"stateVariables": {
+				"voter": {
+					"details": "used to change the name/symbol of the pool by calling emergencyCouncil"
+				}
+			},
+			"version": 1
+		},
+		"userdoc": {
+			"kind": "user",
+			"methods": {
+				"allPoolsLength()": {
+					"notice": "returns the number of pools created from this factory"
+				},
+				"createPool(address,address,bool)": {
+					"notice": "Create a pool given two tokens and if they're stable/volatile"
+				},
+				"createPool(address,address,uint24)": {
+					"notice": "Support for v3-style pools which wraps around createPool(tokena,tokenB,stable)"
+				},
+				"getFee(address,bool)": {
+					"notice": "Returns fee for a pool, as custom fees are possible."
+				},
+				"getPool(address,address,bool)": {
+					"notice": "Return address of pool created by this factory"
+				},
+				"getPool(address,address,uint24)": {
+					"notice": "Support for v3-style pools which wraps around getPool(tokenA,tokenB,stable)"
+				},
+				"isPool(address)": {
+					"notice": "Is a valid pool created by this factory."
+				},
+				"setCustomFee(address,uint256)": {
+					"notice": "Set overriding fee for a pool from the default"
+				},
+				"setFee(bool,uint256)": {
+					"notice": "Set default fee for stable and volatile pools."
+				}
+			},
+			"version": 1
+		}
+	},
+	"settings": {
+		"compilationTarget": {
+			"contracts/aerodrome/factories/PoolFactory.sol": "PoolFactory"
+		},
+		"evmVersion": "shanghai",
+		"libraries": {},
+		"metadata": {
+			"bytecodeHash": "ipfs"
+		},
+		"optimizer": {
+			"enabled": false,
+			"runs": 200
+		},
+		"remappings": []
+	},
+	"sources": {
+		"@openzeppelin/contracts/proxy/Clones.sol": {
+			"keccak256": "0xd18408af8a91bedb3d56343eeb9b30eb852e6dea93a5e2d5c6db9ca4cb905155",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://061475b7302a732dc598907790f407417551c2b13e89daa57b3698489ef5484b",
+				"dweb:/ipfs/QmdX5qmk3VSniSErFuD4aVawQxUi2MuUbP7spPcHddPfcX"
+			]
+		},
+		"contracts/aerodrome/factories/PoolFactory.sol": {
+			"keccak256": "0x58fad27c07a5cae061d0e8ce5b06a7daa01f5b1abd58df38df4fedd473178e8b",
+			"license": "BUSL-1.1",
+			"urls": [
+				"bzz-raw://2f12cab4c63ad339d10cb3fe140e9315ebc27d843ec2fe26d23f1be31c3b71f2",
+				"dweb:/ipfs/QmXLJRuLtwFK6tQ2nN5uA8vu8LRvPhGyaD5TVmuypXpeJj"
+			]
+		},
+		"contracts/aerodrome/interfaces/IPool.sol": {
+			"keccak256": "0x452152c63f1756061b8343063f25d475a6c34773069e3d546d2c09f436688e83",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://9083ab7882ee2256404148106d4ff82a00d97a205fcaf3e64ff51a93b2e80235",
+				"dweb:/ipfs/QmNXuxuXk93fLQyznBbjTWtJiiAL12Z4jJ6jyAJPxvEyXU"
+			]
+		},
+		"contracts/aerodrome/interfaces/factories/IPoolFactory.sol": {
+			"keccak256": "0x20a029864739473b6a2540eb7c12124e7ff7088b49ff4dfd8bb6592ea93d1cf0",
+			"license": "MIT",
+			"urls": [
+				"bzz-raw://7a945971ceb50a86df6ea4e86ad38adf0cbf3964a5ff50e0aac0fbe0974b69d0",
+				"dweb:/ipfs/QmXgEWnz2BaSVTbWFjbN7hSBjTija41QhtimqzLSjGe4r8"
+			]
+		}
+	},
+	"version": 1
+}

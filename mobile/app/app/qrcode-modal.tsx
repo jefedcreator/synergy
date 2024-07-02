@@ -116,7 +116,7 @@ function QRScan() {
       Toast.show({
         type: "error",
         text1: "Transfer error!",
-        text2: "GHO Transfer failed",
+        text2: "USDC Transfer failed",
       });
       console.error("error", error);
     }

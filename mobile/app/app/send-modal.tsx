@@ -195,7 +195,7 @@ export default function SendModal() {
       Toast.show({
         type: "success",
         text1: "Success!",
-        text2: "GHO sent successfully.",
+        text2: "USDC sent successfully.",
       });
       router.back();
     } catch (error) {
@@ -223,7 +223,7 @@ export default function SendModal() {
         className="bg-[#0052FF] text-white"
       >
         <Appbar.Content
-          title="Send GHO"
+          title="Send USDC"
           color="#fff"
           titleStyle={{ fontWeight: "bold" }}
         />

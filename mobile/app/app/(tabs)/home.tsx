@@ -140,11 +140,11 @@ export default function Home() {
           </View>
         </View>
         <View className="p-14">
-          <ImageBackground
+          {/* <ImageBackground
             source={require("../../../assets/images/ghost.png")}
             className="flex flex-col space-y-4 py-8 bg-opacity-20"
             imageStyle={{ opacity: 0.1 }}
-          >
+          > */}
             <Text className="text-white font-semibold text-center">
               Your balance
             </Text>
@@ -163,7 +163,7 @@ export default function Home() {
                 onPress={() => router.push("/app/send")}
               />
             </View>
-          </ImageBackground>
+          {/* </ImageBackground> */}
         </View>
         <TransactionsList
           transactions={transactions}

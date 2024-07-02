@@ -1,27 +1,25 @@
-import ParallaxScrollView from "@/components/ParallaxScrollView";
-import { ThemedButton } from "@/components/ThemedButton";
-import { ThemedInput } from "@/components/ThemedInput";
-import { ThemedText } from "@/components/ThemedText";
-import { ThemedView } from "@/components/ThemedView";
-import { chain, client } from "@/constants/thirdweb";
-import { firebaseAuth, firebaseFirestore } from "@/firebaseConfig";
-import { useThemeColor } from "@/hooks/useThemeColor";
-import { useUserStore } from "@/store";
+import { ThemedButton } from "../components/ThemedButton";
+import { ThemedInput } from "../components/ThemedInput";
+import { ThemedText } from "../components/ThemedText";
+import { ThemedView } from "../components/ThemedView";
+import { chain, client } from "../constants/thirdweb";
+import { firebaseAuth, firebaseFirestore } from "../firebaseConfig";
+import { useThemeColor } from "../hooks/useThemeColor";
+import { useUserStore } from "../store";
 import { router } from "expo-router";
 import * as SecureStore from "expo-secure-store";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { doc, getDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, IconButton } from "react-native-paper";
 import {
   Image,
   Pressable,
   StyleSheet,
+  Text,
   TouchableOpacity,
   View,
-  Text,
 } from "react-native";
-import { defineChain } from "thirdweb";
+import { ActivityIndicator } from "react-native-paper";
 import {
   useActiveAccount,
   useActiveWallet,
@@ -38,9 +36,7 @@ import {
   InAppWalletSocialAuth,
   Wallet,
   createWallet,
-  embeddedWallet,
   getWalletInfo,
-  smartWallet,
 } from "thirdweb/wallets";
 import {
   getUserEmail,
@@ -57,7 +53,7 @@ const wallets = [
   inAppWallet({
     smartAccount: {
       chain,
-      factoryAddress: process.env.EXPO_PUBLIC_TW_FACTORY_ADDRESS,
+      factoryAddress: process.env.EXPO_PUBLIC_TW_FACTORY_ADMIN_ADDRESS,
       sponsorGas: true,
     },
   }),
@@ -77,6 +73,7 @@ const externalWallets = wallets.slice(1);
 //   chain,
 //   strategy: "google",
 // });
+const oAuthOptions: InAppWalletSocialAuth[] = ["google", "facebook", "apple"];
 
 export default function Home() {
   const status = useActiveWalletConnectionStatus();
@@ -136,95 +133,64 @@ export default function Home() {
     }
   };
 
-  const { isConnecting } = useConnect();
-
-  return (
-    <View className="flex-1 flex-col pt-10 bg-[#0052FF] justify-between">
-      {isConnecting ? (
-        <View className="flex-1 flex-col bg-[#0052FF] items-center justify-center">
-          <ActivityIndicator animating={true} color={"#FFF"} />
-        </View>
-      ) : (
-        <>
-          <View className="flex items-center justify-center">
-            <Text className="text-[#C9B3F9] font-black text-xl italic">
-              SYNERGY ⚡️
-            </Text>
-          </View>
-          <ConnectSection />
-        </>
-      )}
-      {/* <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Connecting Wallets</ThemedText>
-      </ThemedView> */}
-    </View>
-  );
-}
-
-function ConnectSection() {
   const wallet = useActiveWallet();
   const autoConnect = useAutoConnect({
     client,
     wallets,
   });
   const autoConnecting = autoConnect.isLoading;
-  console.log("autoConnecting", autoConnecting);
 
-  if (autoConnecting) {
-    return (
-      <View className="flex-1 flex-col bg-[#0052FF] items-center justify-center">
-        <ActivityIndicator animating={true} color={"#FFF"} />
-      </View>
+  const { disconnect } = useDisconnect();
+  const account = useActiveAccount();
+  const activeWallet = useActiveWallet();
+  const setActive = useSetActiveWallet();
+  const connectedWallets = useConnectedWallets();
+  const balanceQuery = useWalletBalance({
+    address: account?.address,
+    chain: activeWallet?.getChain(),
+    client,
+  });
+
+  const [email, setEmail] = useState("");
+
+  useEffect(() => {
+    const fetchEmail = async () => {
+      if (activeWallet?.id === "inApp") {
+        try {
+          const email = await getUserEmail({
+            client,
+          });
+          if (email) {
+            setEmail(email);
+          }
+        } catch (e) {
+          // no email
+        }
+      } else {
+        setEmail("");
+      }
+    };
+    fetchEmail();
+  }, [account]);
+
+  const switchWallet = async () => {
+    const activeIndex = connectedWallets.findIndex(
+      (w) => w.id === activeWallet?.id
     );
-  }
+    const nextWallet =
+      connectedWallets[(activeIndex + 1) % connectedWallets.length];
+    if (nextWallet) {
+      await setActive(nextWallet);
+    }
+  };
 
-  return (
-    <View style={styles.stepContainer}>
-      {wallet ? (
-        <>
-          <ConnectedSection />
-        </>
-      ) : (
-        <ThemedView style={{ gap: 16, padding: 10 }}>
-          <ThemedText type="defaultSemiBold">In-app wallet</ThemedText>
-          <ConnectInAppWallet />
-          <ThemedView style={{ height: 12 }} />
-          <ThemedText type="defaultSemiBold">External wallet</ThemedText>
-          <ThemedView style={styles.rowContainer}>
-            {externalWallets.map((w) => (
-              <ConnectExternalWallet key={w.id} {...w} />
-            ))}
-          </ThemedView>
-        </ThemedView>
-      )}
-    </View>
-  );
-}
-
-const oAuthOptions: InAppWalletSocialAuth[] = ["google", "facebook", "apple"];
-
-function ConnectInAppWallet() {
-  return (
-    <>
-      <ThemedView style={[styles.rowContainer]}>
-        {oAuthOptions.map((auth) => (
-          <ConnectWithSocial key={auth} auth={auth} />
-        ))}
-      </ThemedView>
-      <ConnectWithPhoneNumber />
-    </>
-  );
-}
-
-function ConnectWithSocial(props: { auth: InAppWalletSocialAuth }) {
   const bgColor = useThemeColor({}, "tint");
-  // const { connect, isConnecting } = useConnect();
-  const strategy = props.auth;
+
   const { connect, isConnecting } = useConnect({
     client,
     accountAbstraction: {
       chain,
-      factoryAddress: process.env.EXPO_PUBLIC_TW_FACTORY_ADDRESS,
+      factoryAddress: process.env.EXPO_PUBLIC_TW_FACTORY_ADMIN_ADDRESS,
       sponsorGas: true,
     },
   });
@@ -242,57 +208,171 @@ function ConnectWithSocial(props: { auth: InAppWalletSocialAuth }) {
       return wallet;
     });
   };
-  const connectInAppWallet = async () => {
-    await connect(async () => {
-      const wallet = inAppWallet({
-        smartAccount: {
-          chain,
-          factoryAddress: process.env.EXPO_PUBLIC_TW_FACTORY_ADDRESS,
-          sponsorGas: true,
-        },
-      });
-      await wallet.connect({
-        client,
-        strategy,
-        redirectUrl: "com.thirdweb.demo://",
-      });
-      return wallet;
-    });
-  };
 
   return (
-    <ThemedView
-      style={{
-        flex: 1,
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        borderStyle: "solid",
-        borderWidth: 1,
-        borderColor: bgColor,
-        borderRadius: 6,
-        height: 60,
-      }}
-    >
-      {isConnecting ? (
-        <ActivityIndicator animating={true} color={"#0052FF"} />
+    <View className="flex-1 flex-col pt-10 bg-[#0052FF] justify-between">
+      {isConnecting || autoConnecting ? (
+        <View className="flex-1 flex-col bg-[#0052FF] items-center justify-center">
+          <ActivityIndicator animating={true} color={"#FFF"} />
+        </View>
       ) : (
-        <TouchableOpacity
-          key={strategy}
-          onPress={connectToSmartAccount}
-          // onPress={connectInAppWallet}
-          disabled={isConnecting}
-        >
-          <Image
-            source={getSocialIcon(strategy)}
-            style={{
-              width: 38,
-              height: 38,
-            }}
-          />
-        </TouchableOpacity>
+        <>
+          <View className="flex items-center justify-center">
+            <Text className="text-[#C9B3F9] font-black text-xl italic">
+              SYNERGY ⚡️
+            </Text>
+          </View>
+          <View style={styles.stepContainer}>
+            {wallet ? (
+              <>
+                {account ? (
+                  <>
+                    <ThemedText>Connected Wallets: </ThemedText>
+                    <ThemedView style={{ gap: 2 }}>
+                      {connectedWallets.map((w, i) => (
+                        <ThemedText key={w.id + i} type="defaultSemiBold">
+                          - {w.id} {w.id === activeWallet?.id ? "✅" : ""}
+                        </ThemedText>
+                      ))}
+                    </ThemedView>
+                    <ThemedView style={{ height: 12 }} />
+                    {email && activeWallet?.id === "inApp" && (
+                      <ThemedText>
+                        Email:{" "}
+                        <ThemedText type="defaultSemiBold">{email}</ThemedText>
+                      </ThemedText>
+                    )}
+                    <ThemedText>
+                      Address:{" "}
+                      <ThemedText type="defaultSemiBold">
+                        {shortenAddress(account.address)}
+                      </ThemedText>
+                    </ThemedText>
+                    <ThemedText>
+                      Chain:{" "}
+                      <ThemedText type="defaultSemiBold">
+                        {activeWallet?.getChain()?.name || "Unknown"}
+                      </ThemedText>
+                    </ThemedText>
+                    <ThemedText>
+                      Balance:{" "}
+                      {balanceQuery.data && (
+                        <ThemedText type="defaultSemiBold">
+                          {`${balanceQuery.data?.displayValue.slice(0, 8)} ${
+                            balanceQuery.data?.symbol
+                          }`}
+                        </ThemedText>
+                      )}
+                    </ThemedText>
+                    <ThemedView style={{ height: 12 }} />
+                    {connectedWallets.length > 1 && (
+                      <ThemedButton
+                        variant="secondary"
+                        title="Switch Wallet"
+                        onPress={switchWallet}
+                      />
+                    )}
+                    <ThemedButton
+                      title="Sign message"
+                      variant="secondary"
+                      onPress={async () => {
+                        if (account) {
+                          account.signMessage({ message: "hello world" });
+                        }
+                      }}
+                    />
+                    <ThemedButton
+                      title="Disconnect"
+                      variant="secondary"
+                      onPress={async () => {
+                        if (activeWallet) {
+                          disconnect(activeWallet);
+                        }
+                      }}
+                    />
+                    <ThemedView style={{ height: 12 }} />
+                    <ThemedText type="defaultSemiBold">
+                      Connect another wallet
+                    </ThemedText>
+                    <ThemedView style={styles.rowContainer}>
+                      {externalWallets
+                        .filter(
+                          (w) =>
+                            !connectedWallets.map((cw) => cw.id).includes(w.id)
+                        )
+                        .map((w, i) => (
+                          <ConnectExternalWallet key={w.id + i} {...w} />
+                        ))}
+                    </ThemedView>
+                  </>
+                ) : (
+                  <>
+                    <ThemedText>Connect to mint an NFT.</ThemedText>
+                  </>
+                )}
+              </>
+            ) : (
+              <ThemedView style={{ gap: 16, padding: 10 }}>
+                <ThemedText type="defaultSemiBold">In-app wallet</ThemedText>
+                <>
+                  <ThemedView style={[styles.rowContainer]}>
+                    {oAuthOptions.map((auth) => (
+                      <ThemedView
+                        key={auth}
+                        style={{
+                          flex: 1,
+                          flexDirection: "column",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          borderStyle: "solid",
+                          borderWidth: 1,
+                          borderColor: bgColor,
+                          borderRadius: 6,
+                          height: 60,
+                        }}
+                      >
+                        {isConnecting ? (
+                          <ActivityIndicator
+                            animating={true}
+                            color={"#0052FF"}
+                          />
+                        ) : (
+                          <TouchableOpacity
+                            key={auth}
+                            onPress={connectToSmartAccount}
+                            // onPress={connectInAppWallet}
+                            disabled={isConnecting}
+                          >
+                            <Image
+                              source={getSocialIcon(auth)}
+                              style={{
+                                width: 38,
+                                height: 38,
+                              }}
+                            />
+                          </TouchableOpacity>
+                        )}
+                      </ThemedView>
+                    ))}
+                  </ThemedView>
+                  <ConnectWithPhoneNumber />
+                </>
+                <ThemedView style={{ height: 12 }} />
+                <ThemedText type="defaultSemiBold">External wallet</ThemedText>
+                <ThemedView style={styles.rowContainer}>
+                  {externalWallets.map((w) => (
+                    <ConnectExternalWallet key={w.id} {...w} />
+                  ))}
+                </ThemedView>
+              </ThemedView>
+            )}
+          </View>
+        </>
       )}
-    </ThemedView>
+      {/* <ThemedView style={styles.titleContainer}>
+        <ThemedText type="title">Connecting Wallets</ThemedText>
+      </ThemedView> */}
+    </View>
   );
 }
 
@@ -321,7 +401,7 @@ function ConnectWithPhoneNumber() {
       const wallet = inAppWallet({
         smartAccount: {
           chain,
-          factoryAddress: process.env.EXPO_PUBLIC_TW_FACTORY_ADDRESS,
+          factoryAddress: process.env.EXPO_PUBLIC_TW_FACTORY_ADMIN_ADDRESS,
           sponsorGas: true,
         },
       });
@@ -418,138 +498,6 @@ function ConnectExternalWallet(wallet: Wallet) {
   );
 }
 
-function ConnectedSection() {
-  const { disconnect } = useDisconnect();
-  const account = useActiveAccount();
-  const activeWallet = useActiveWallet();
-  const setActive = useSetActiveWallet();
-  const connectedWallets = useConnectedWallets();
-  const balanceQuery = useWalletBalance({
-    address: account?.address,
-    chain: activeWallet?.getChain(),
-    client,
-  });
-
-  const [email, setEmail] = useState("");
-
-  useEffect(() => {
-    const fetchEmail = async () => {
-      if (activeWallet?.id === "inApp") {
-        try {
-          const email = await getUserEmail({
-            client,
-          });
-          if (email) {
-            setEmail(email);
-          }
-        } catch (e) {
-          // no email
-        }
-      } else {
-        setEmail("");
-      }
-    };
-    fetchEmail();
-  }, [account]);
-
-  const switchWallet = async () => {
-    const activeIndex = connectedWallets.findIndex(
-      (w) => w.id === activeWallet?.id
-    );
-    const nextWallet =
-      connectedWallets[(activeIndex + 1) % connectedWallets.length];
-    if (nextWallet) {
-      await setActive(nextWallet);
-    }
-  };
-
-  return (
-    <>
-      {account ? (
-        <>
-          <ThemedText>Connected Wallets: </ThemedText>
-          <ThemedView style={{ gap: 2 }}>
-            {connectedWallets.map((w, i) => (
-              <ThemedText key={w.id + i} type="defaultSemiBold">
-                - {w.id} {w.id === activeWallet?.id ? "✅" : ""}
-              </ThemedText>
-            ))}
-          </ThemedView>
-          <ThemedView style={{ height: 12 }} />
-          {email && activeWallet?.id === "inApp" && (
-            <ThemedText>
-              Email: <ThemedText type="defaultSemiBold">{email}</ThemedText>
-            </ThemedText>
-          )}
-          <ThemedText>
-            Address:{" "}
-            <ThemedText type="defaultSemiBold">
-              {shortenAddress(account.address)}
-            </ThemedText>
-          </ThemedText>
-          <ThemedText>
-            Chain:{" "}
-            <ThemedText type="defaultSemiBold">
-              {activeWallet?.getChain()?.name || "Unknown"}
-            </ThemedText>
-          </ThemedText>
-          <ThemedText>
-            Balance:{" "}
-            {balanceQuery.data && (
-              <ThemedText type="defaultSemiBold">
-                {`${balanceQuery.data?.displayValue.slice(0, 8)} ${
-                  balanceQuery.data?.symbol
-                }`}
-              </ThemedText>
-            )}
-          </ThemedText>
-          <ThemedView style={{ height: 12 }} />
-          {connectedWallets.length > 1 && (
-            <ThemedButton
-              variant="secondary"
-              title="Switch Wallet"
-              onPress={switchWallet}
-            />
-          )}
-          <ThemedButton
-            title="Sign message"
-            variant="secondary"
-            onPress={async () => {
-              if (account) {
-                account.signMessage({ message: "hello world" });
-              }
-            }}
-          />
-          <ThemedButton
-            title="Disconnect"
-            variant="secondary"
-            onPress={async () => {
-              if (activeWallet) {
-                disconnect(activeWallet);
-              }
-            }}
-          />
-          <ThemedView style={{ height: 12 }} />
-          <ThemedText type="defaultSemiBold">Connect another wallet</ThemedText>
-          <ThemedView style={styles.rowContainer}>
-            {externalWallets
-              .filter(
-                (w) => !connectedWallets.map((cw) => cw.id).includes(w.id)
-              )
-              .map((w, i) => (
-                <ConnectExternalWallet key={w.id + i} {...w} />
-              ))}
-          </ThemedView>
-        </>
-      ) : (
-        <>
-          <ThemedText>Connect to mint an NFT.</ThemedText>
-        </>
-      )}
-    </>
-  );
-}
-
 const styles = StyleSheet.create({
   titleContainer: {
     flexDirection: "row",
@@ -578,10 +526,10 @@ const styles = StyleSheet.create({
 function getSocialIcon(strategy: string) {
   switch (strategy) {
     case "google":
-      return require("@/assets/images/google.png");
+      return require("../assets/images/google.png");
     case "facebook":
-      return require("@/assets/images/facebook.png");
+      return require("../assets/images/facebook.png");
     case "apple":
-      return require("@/assets/images/apple.png");
+      return require("../assets/images/apple.png");
   }
 }

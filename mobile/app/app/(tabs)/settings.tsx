@@ -70,7 +70,7 @@ export default function Settings() {
                   />
                 </Pressable>
               </View>
-              <Text className="text-[#FFF] font-semibold">GHO • Sepolia</Text>
+              <Text className="text-[#FFF] font-semibold">USDC • Sepolia</Text>
             </View>
           </View>
           <AppButton

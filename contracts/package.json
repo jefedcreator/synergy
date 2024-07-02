@@ -1,0 +1,53 @@
+{
+  "name": "synergy",
+  "scripts": {
+    "build": "npx thirdweb@latest detect",
+    "deploy": "npx thirdweb@latest deploy",
+    "publish": "npx thirdweb@latest publish",
+    "test": "npx hardhat test",
+    "node": "npx hardhat node",
+    "compile": "npx hardhat compile",
+    "hardhat:localhost": "concurrently \"npm run node\" \"npx hardhat run scripts/deploy.ts --network localhost\"",
+    "hardhat:deploy": "npx hardhat run scripts/deploy.ts --network basesepolia",
+    "hardhat:verify": "npx hardhat ignition verify chain-84532 --include-unrelated-contracts"
+  },
+  "devDependencies": {
+    "@matterlabs/hardhat-zksync-solc": "^0.3.17",
+    "@nomicfoundation/hardhat-chai-matchers": "^2.0.0",
+    "@nomicfoundation/hardhat-ethers": "^3.0.0",
+    "@nomicfoundation/hardhat-ignition": "^0.15.2",
+    "@nomicfoundation/hardhat-ignition-viem": "^0.15.2",
+    "@nomicfoundation/hardhat-network-helpers": "^1.0.10",
+    "@nomicfoundation/hardhat-toolbox": "^5.0.0",
+    "@nomicfoundation/hardhat-toolbox-viem": "^3.0.0",
+    "@nomicfoundation/hardhat-verify": "^2.0.6",
+    "@nomicfoundation/hardhat-viem": "^2.0.1",
+    "@nomicfoundation/ignition-core": "^0.15.2",
+    "@nomiclabs/hardhat-ethers": "^2.2.3",
+    "@nomiclabs/hardhat-etherscan": "^3.1.8",
+    "@nomiclabs/hardhat-waffle": "^2.0.6",
+    "@typechain/ethers-v6": "^0.5.0",
+    "@typechain/hardhat": "^9.0.0",
+    "@types/chai": "^4.3.16",
+    "@types/chai-as-promised": "^7.1.8",
+    "@types/mocha": "^10.0.6",
+    "chai": "4.3.7",
+    "ethereum-waffle": "^4.0.10",
+    "hardhat-gas-reporter": "^1.0.10",
+    "solidity-coverage": "^0.8.12",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.0.4",
+    "viem": "^2.10.1",
+    "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "@chainlink/contracts": "^1.1.0",
+    "@chainlink/contracts-ccip": "^1.4.0",
+    "@openzeppelin/contracts": "^5.0.2",
+    "@thirdweb-dev/contracts": "^3.15.0",
+    "abdk-libraries-solidity": "^3.2.0",
+    "hardhat": "^2.22.6",
+    "thirdweb": "^5.30.0",
+    "zksync-web3": "^0.14.3"
+  }
+}

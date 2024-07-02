@@ -124,7 +124,7 @@ export default function Pocket() {
             />
             <View className="flex flex-col items-start">
               <Text className="text-white text-lg font-black text-center">
-                GHO Vault
+                USDC Vault
               </Text>
               <Text className="text-white/80 font-semibold">
                 ${vaultBalance.toFixed(2)}
@@ -159,7 +159,7 @@ export default function Pocket() {
           </View>
           <View className="w-full">
             <AppButton
-              text="Borrow GHO"
+              text="Borrow USDC"
               onPress={() => router.push("/app/borrow-modal")}
             />
           </View>
