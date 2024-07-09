@@ -1,11 +1,4 @@
 {
-  "DAI#DAI": "0x693F54323e8bb9A0B1110a51ea5DcCdB891904e1",
-  "USDT#USDT": "0x2e87bba7ab20Ee5cE79552a2454e4406d1479250",
-  "pool#Pool": "0xe4c6C5cbc6731e35DFc56F7b9fB293c8D7B2FeCb",
-  "poolFactory#PoolFactory": "0xf0228B35a1a69Ce079346804b81E44BD5e738A81",
-  "gaugeFactory#GaugeFactory": "0x0E8FcF60fd14404CF6551F5716e360878A01F4db",
-  "managedRewardsFactory#ManagedRewardsFactory": "0x2C3eE9e823006CFdfd3a08A30b0285d643485060",
-  "votingRewardsFactory#VotingRewardsFactory": "0x39c0fD27E2AB0282c161eC87cE58f7016c67D31D",
-  "factoryRegistry#FactoryRegistry": "0xcb83CB8a6FD1Ab1a02668f69DDE8A0Cecd01caaC",
-  "router#Router": "0x50b574348a2533Bd53c2Eb356f07B8bC57c150B6"
+  "vault#Vault": "0xe8B8A72fE6EC5b28bF6ee0776aaD9375BA6DCda6",
+  "synthetix#Synthetix": "0xf580D275262C228BAcFBAe9595081972967Fcf4A"
 }

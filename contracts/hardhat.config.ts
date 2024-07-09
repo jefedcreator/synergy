@@ -52,6 +52,15 @@ const config: HardhatUserConfig = {
           },
         },
       },
+      {
+        version: "0.8.26",
+        settings: {
+          optimizer: {
+            enabled: true,
+            runs: 1000,
+          },
+        },
+      },
     ],
   },
   networks: {
@@ -64,6 +73,12 @@ const config: HardhatUserConfig = {
       url: `https://base-sepolia.g.alchemy.com/v2/i05mxegOuaU4goDLCHtRCleHfK1TevYU`,
       accounts: [PRIVATE_KEY],
       gasPrice: 8000000000,
+    },
+    hardhat: {
+      forking: {
+        url: `https://base-sepolia.g.alchemy.com/v2/i05mxegOuaU4goDLCHtRCleHfK1TevYU`,
+        enabled: true,
+      },
     },
   },
   etherscan: {

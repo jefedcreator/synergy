@@ -1,10 +1,10 @@
 import { time } from "@nomicfoundation/hardhat-network-helpers";
 import hre from "hardhat";
 import { parseEther } from "viem";
-import DAIModule from "../ignition/modules/DAI";
-import PoolFactoryModule from "../ignition/modules/PoolFactory";
-import RouterModule from "../ignition/modules/Router";
-import USDTModule from "../ignition/modules/USDT";
+import DAIModule from "../ignition/modules/aerodrome/DAI";
+import PoolFactoryModule from "../ignition/modules/aerodrome/PoolFactory";
+import RouterModule from "../ignition/modules/aerodrome/Router";
+import USDTModule from "../ignition/modules/aerodrome/USDT";
 
 async function main() {
   const ONE_YEAR_IN_SECS = 365 * 24 * 60 * 60;

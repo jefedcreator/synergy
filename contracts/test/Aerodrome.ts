@@ -10,7 +10,7 @@ describe("Aerodrome contracts", function () {
   // We define a fixture to reuse the same setup in every test.
   // We use loadFixture to run this setup once, snapshot that state,
   // and reset Hardhat Network to that snapshot in every test.
-  async function deployLendingPool() {
+  async function deployAerodrome() {
     // Contracts are deployed using the first signer/account by default
     const [owner, otherAccount] = await hre.viem.getWalletClients();
     const [ownerAddress] = await owner.getAddresses();
@@ -73,7 +73,7 @@ describe("Aerodrome contracts", function () {
         poolFactory,
         router,
         collateralAmount,
-      } = await loadFixture(deployLendingPool);
+      } = await loadFixture(deployAerodrome);
       const ONE_YEAR_IN_SECS = 365 * 24 * 60 * 60;
       const deadline = BigInt((await time.latest()) + ONE_YEAR_IN_SECS);
       console.log("deadline", deadline);

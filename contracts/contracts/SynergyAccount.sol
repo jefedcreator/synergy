@@ -206,7 +206,7 @@ contract Account is
         usdcThreshold = IERC20(defaultToken).balanceOf(address(this));
     }
 
-    /// @notice Special function execution for ghost wallet. Execute a swap for defaultToken and supply on AAVE.
+    /// @notice Special function execution for synergy. Execute a swap for defaultToken and supply on AAVE.
     function executeSwapAndSupply(
         address token
     ) external virtual onlyAdminOrUpkeep {
@@ -258,13 +258,10 @@ contract Account is
     }
 
     function executeSupplyToVault() public onlyAdminOrUpkeep {
-        // Get GHO balance
-        uint ghoBalance = IERC20(defaultToken).balanceOf(address(this));
-        uint ghoToSupply = ghoBalance % 1e18;
-        // Approve GHO to vault
-        IERC20(defaultToken).approve(vault, ghoToSupply);
-        // Deposit GHO to vault
-        IERC4626(vault).deposit(ghoToSupply, address(this));
+        uint usdcBalance = IERC20(defaultToken).balanceOf(address(this));
+        uint usdcToSupply = usdcBalance % 1e18;
+        IERC20(defaultToken).approve(vault, usdcToSupply);
+        IERC4626(vault).deposit(usdcToSupply, address(this));
         usdcThreshold = IERC20(defaultToken).balanceOf(address(this));
     }
 

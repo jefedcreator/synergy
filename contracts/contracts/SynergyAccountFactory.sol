@@ -169,12 +169,12 @@ contract AccountFactory is
     function performUpkeep(
         bytes calldata performData
     ) external override(AutomationCompatibleInterface) onlyUpkeep {
-        (address wallet, address[] memory tokensToSwap, bool ghoReceived) = abi
+        (address wallet, address[] memory tokensToSwap, bool usdcReceived) = abi
             .decode(performData, (address, address[], bool));
         for (uint i; i < tokensToSwap.length; ++i) {
             Account(payable(wallet)).executeSwapAndSupply(tokensToSwap[i]);
         }
-        if (ghoReceived) {
+        if (usdcReceived) {
             Account(payable(wallet)).executeSupplyToVault();
         }
     }
