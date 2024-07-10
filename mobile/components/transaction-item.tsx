@@ -1,13 +1,14 @@
-import { Pressable, View, Text } from "react-native";
-import { DBTransaction } from "../store/interfaces";
-import { Divider } from "react-native-paper";
 import TimeAgo from "@andordavoti/react-native-timeago";
-import { sepolia, basesepolia } from "../constants/sepolia";
-import * as WebBrowser from "expo-web-browser";
-import Avatar from "./avatar";
 import { router } from "expo-router";
+import * as WebBrowser from "expo-web-browser";
+import { Pressable, Text, View } from "react-native";
+import { Divider } from "react-native-paper";
+import { isAddress, shortenAddress } from "thirdweb/utils";
+import { basesepolia } from "../constants/sepolia";
+import { DBTransaction } from "../store/interfaces";
 import { useProfileStore } from "../store/use-profile-store";
 import { useUserStore } from "../store/use-user-store";
+import Avatar from "./avatar";
 
 export default function TransactionItem({
   transaction,
@@ -21,9 +22,11 @@ export default function TransactionItem({
   const setProfileUserTransactions = useProfileStore(
     (state) => state.setProfileUserTransactions
   );
-  const { from, to, toUsername, fromUsername, createdAt, txHash } = transaction;
+  const { from, to, toUsername, fromUsername, createdAt, txHash, crossChain } =
+    transaction;
   const amount = parseFloat(transaction.amount);
   const isFrom = from === user?.address;
+
   return (
     <View key={`transaction-${index}`}>
       <View className="flex flex-row items-center justify-between py-4">
@@ -40,22 +43,36 @@ export default function TransactionItem({
             }}
           >
             <Avatar
-              name={(isFrom ? toUsername : fromUsername)
-                .charAt(0)
-                .toUpperCase()}
+              name={
+                (isFrom ? toUsername : fromUsername).charAt(0).toUpperCase() ||
+                user?.address
+              }
             />
           </Pressable>
 
           <View className="flex flex-col">
+            {/* <Text className="text-white font-semibold text-lg">
+              {isFrom
+                ? isAddress(toUsername)
+                  ? shortenAddress(toUsername)
+                  : toUsername
+                : isAddress(fromUsername)
+                ? shortenAddress(fromUsername)
+                : fromUsername}
+            </Text> */}
             <Text className="text-white font-semibold text-lg">
-              {isFrom ? toUsername : fromUsername}
+              {isAddress(to) ? shortenAddress(to) : to}
             </Text>
             <Pressable
               key={`event-${index}`}
               onPress={async () => {
-                await WebBrowser.openBrowserAsync(
-                  `${basesepolia.explorers[0].url}/tx/${txHash}`
-                );
+                crossChain
+                  ? await WebBrowser.openBrowserAsync(
+                      `https://ccip.chain.link/tx/${txHash}`
+                    )
+                  : await WebBrowser.openBrowserAsync(
+                      `${basesepolia.explorers[0].url}/tx/${txHash}`
+                    );
               }}
             >
               <Text className="text-[#FFF]">Click to view detail</Text>

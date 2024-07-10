@@ -91,7 +91,7 @@ export const USDC_BASE_ADDRESS = "0x036CbD53842c5426634e7929541eC2318f3dCF7e";
 export const DAI_ADDRESS = "0xFF34B3d4Aee8ddCd6F9AFFFB6Fe49bD371b8a357";
 export const GHO_SEPOLIA_ADDRESS = "0xc4bF5CbDaBE595361438F8c6a187bDc330539c60";
 export const GHO_ASSET_PRICE = 1e8;
-
+export const USDC_BRIDGE_ADDRESS = "0x535F00B8a4DB5e67dB9FBfBfe65044850b9750Cc";
 export const VAULT_ABI = [
   {
     inputs: [
@@ -2899,3 +2899,375 @@ export const usdtContract = {
   chain: baseSepolia,
   client,
 };
+
+export const USDC_BRIDGE_ABI = [
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_router",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "_usdcToken",
+        type: "address",
+      },
+      {
+        internalType: "address",
+        name: "_link",
+        type: "address",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "constructor",
+  },
+  {
+    inputs: [],
+    name: "AmountIsZero",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "InvalidDestinationChain",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "InvalidGasLimit",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "InvalidLinkToken",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "InvalidReceiverAddress",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "InvalidRouter",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "InvalidUsdcToken",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint64",
+        name: "destinationChainSelector",
+        type: "uint64",
+      },
+    ],
+    name: "NoGasLimitOnDestinationChain",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint64",
+        name: "destinationChainSelector",
+        type: "uint64",
+      },
+    ],
+    name: "NoReceiverOnDestinationChain",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "currentBalance",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "calculatedFees",
+        type: "uint256",
+      },
+    ],
+    name: "NotEnoughBalance",
+    type: "error",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint256",
+        name: "currentBalance",
+        type: "uint256",
+      },
+      {
+        internalType: "uint256",
+        name: "calculatedFees",
+        type: "uint256",
+      },
+    ],
+    name: "NotEnoughUSDCBalance",
+    type: "error",
+  },
+  {
+    inputs: [],
+    name: "NothingToWithdraw",
+    type: "error",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "bytes32",
+        name: "messageId",
+        type: "bytes32",
+      },
+      {
+        indexed: true,
+        internalType: "uint64",
+        name: "destinationChainSelector",
+        type: "uint64",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "beneficiary",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "address",
+        name: "token",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "tokenAmount",
+        type: "uint256",
+      },
+      {
+        indexed: false,
+        internalType: "address",
+        name: "feeToken",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "uint256",
+        name: "fees",
+        type: "uint256",
+      },
+    ],
+    name: "MessageSent",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "from",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "to",
+        type: "address",
+      },
+    ],
+    name: "OwnershipTransferRequested",
+    type: "event",
+  },
+  {
+    anonymous: false,
+    inputs: [
+      {
+        indexed: true,
+        internalType: "address",
+        name: "from",
+        type: "address",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "to",
+        type: "address",
+      },
+    ],
+    name: "OwnershipTransferred",
+    type: "event",
+  },
+  {
+    inputs: [],
+    name: "acceptOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [],
+    name: "owner",
+    outputs: [
+      {
+        internalType: "address",
+        name: "",
+        type: "address",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint64",
+        name: "",
+        type: "uint64",
+      },
+    ],
+    name: "s_gasLimits",
+    outputs: [
+      {
+        internalType: "uint256",
+        name: "",
+        type: "uint256",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint64",
+        name: "_destinationChainSelector",
+        type: "uint64",
+      },
+      {
+        internalType: "address",
+        name: "_beneficiary",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_amount",
+        type: "uint256",
+      },
+    ],
+    name: "sendMessagePayETH",
+    outputs: [
+      {
+        internalType: "bytes32",
+        name: "messageId",
+        type: "bytes32",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint64",
+        name: "_destinationChainSelector",
+        type: "uint64",
+      },
+      {
+        internalType: "address",
+        name: "_beneficiary",
+        type: "address",
+      },
+      {
+        internalType: "uint256",
+        name: "_amount",
+        type: "uint256",
+      },
+    ],
+    name: "sendMessagePayLINK",
+    outputs: [
+      {
+        internalType: "bytes32",
+        name: "messageId",
+        type: "bytes32",
+      },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "uint64",
+        name: "_destinationChainSelector",
+        type: "uint64",
+      },
+      {
+        internalType: "uint256",
+        name: "_gasLimit",
+        type: "uint256",
+      },
+    ],
+    name: "setGasLimitForDestinationChain",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "to",
+        type: "address",
+      },
+    ],
+    name: "transferOwnership",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_beneficiary",
+        type: "address",
+      },
+    ],
+    name: "withdrawLinkToken",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [
+      {
+        internalType: "address",
+        name: "_beneficiary",
+        type: "address",
+      },
+    ],
+    name: "withdrawUsdcToken",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+] as const;
+
+export const usdcBridgeContract = {
+  address: USDC_BRIDGE_ADDRESS,
+  abi: USDC_BRIDGE_ABI,
+  chain: baseSepolia,
+  client,
+};
+
+export const arbSelector: any = "3478487238524512106";
+export const avaxSelector: any = "14767482510784806043";
+export const sepoliaSelector: any = "16015286601757825753";
+export const opSelector: any = "5224473277236331295";
+export const baseSelector: any = "10344971235874465080";

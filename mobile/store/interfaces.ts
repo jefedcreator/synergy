@@ -1,6 +1,5 @@
 import { TransactionReceipt } from "thirdweb/dist/types/transaction/types";
 
-
 export interface SimpleUser {
   address: string;
   username: string;
@@ -23,4 +22,5 @@ export interface DBTransaction {
   amount: string;
   createdAt: string;
   txHash: string;
+  crossChain?: boolean;
 }

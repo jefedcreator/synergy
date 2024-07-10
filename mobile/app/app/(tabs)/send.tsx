@@ -69,7 +69,7 @@ export default function Send() {
       </Appbar.Header>
       <View className="flex-1 flex-col px-4 bg-[#0052FF]">
         <Searchbar
-          placeholder="Search user, ENS or address..."
+          placeholder="Search synergy user,or address..."
           onChangeText={onChangeText}
           value={searchQuery}
           className="bg-transparent border border-[#FFF] !text-white"
@@ -80,6 +80,40 @@ export default function Send() {
           placeholderTextColor={"#FFF"}
           theme={{ colors: { onSurfaceVariant: "#FFF" } }}
         />
+        {searchQuery !== "" &&
+          searchQuery.slice(0, 2) === "0x" &&
+          searchQuery.trim().length == 42 && (
+            <View className="flex flex-col space-y-4 mt-4">
+              <Pressable
+                className="flex flex-row items-center justify-between"
+                onPress={() => {
+                  setSendUser({
+                    address: searchQuery.trim() as `0x${string}`,
+                    createdAt: "",
+                    rounding: true,
+                    username: searchQuery,
+                  });
+                  // router.push({
+                  //   pathname: "/app/send-modal",
+                  //   params: {
+                  //     recipient: searchQuery,
+                  //     username: searchQuery,
+                  //   },
+                  // });
+                  router.push(`/app/send-modal`);
+                  setSearchQuery("");
+                }}
+              >
+                <View className="flex flex-row items-center space-x-4">
+                  <Avatar name={searchQuery} />
+                  <Text className="text-white font-semibold text-lg">
+                    {searchQuery}
+                  </Text>
+                </View>
+                <Icon name="chevron-right" size={16} color="#FFF" />
+              </Pressable>
+            </View>
+          )}
         {searchQuery !== "" && (
           <>
             <Text className="text-[#FFF] font-semibold mt-8">

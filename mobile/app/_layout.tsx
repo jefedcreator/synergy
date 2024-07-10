@@ -1,4 +1,3 @@
-import { useColorScheme } from "../hooks/useColorScheme";
 import {
   DarkTheme,
   DefaultTheme,
@@ -19,6 +18,7 @@ import Toast, {
 } from "react-native-toast-message";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { ThirdwebProvider } from "thirdweb/react";
+import { useColorScheme } from "../hooks/useColorScheme";
 
 LogBox.ignoreLogs([new RegExp("TypeError:.*")]);
 

@@ -44,16 +44,15 @@ import {
   preAuthenticate,
 } from "thirdweb/wallets/in-app";
 
-const smartWalletConfig = {
-  factoryAddress: process.env.EXPO_PUBLIC_TW_FACTORY_ADMIN_ADDRESS,
-  gasless: true,
-};
+
+const factoryAddress = "0x6EAD4854775384B9A675557Dd96391Ad8e0489Ac";
+// const factoryAddress = process.env.EXPO_PUBLIC_TW_FACTORY_ADMIN_ADDRESS,
 
 const wallets = [
   inAppWallet({
     smartAccount: {
       chain,
-      factoryAddress: process.env.EXPO_PUBLIC_TW_FACTORY_ADMIN_ADDRESS,
+      factoryAddress,
       sponsorGas: true,
     },
   }),
@@ -190,7 +189,7 @@ export default function Home() {
     client,
     accountAbstraction: {
       chain,
-      factoryAddress: process.env.EXPO_PUBLIC_TW_FACTORY_ADMIN_ADDRESS,
+      factoryAddress,
       sponsorGas: true,
     },
   });
@@ -401,7 +400,7 @@ function ConnectWithPhoneNumber() {
       const wallet = inAppWallet({
         smartAccount: {
           chain,
-          factoryAddress: process.env.EXPO_PUBLIC_TW_FACTORY_ADMIN_ADDRESS,
+          factoryAddress,
           sponsorGas: true,
         },
       });

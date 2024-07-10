@@ -6,7 +6,12 @@ import { ActivityIndicator, Appbar } from "react-native-paper";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Toast from "react-native-toast-message";
 import Icon from "react-native-vector-icons/FontAwesome";
-import { PreparedTransaction, prepareContractCall, sendTransaction, waitForReceipt } from "thirdweb";
+import {
+  PreparedTransaction,
+  prepareContractCall,
+  sendTransaction,
+  waitForReceipt,
+} from "thirdweb";
 import {
   useActiveAccount,
   useReadContract,
@@ -50,15 +55,6 @@ export default function TransferModal() {
   });
 
   const balance = balanceData ? parseFloat(formatUnits(balanceData, 6)) : 0;
-
-  console.log({
-    balanceData,
-    balance,
-    float: balanceData
-      ? parseFloat(formatUnits(balanceData, 18)).toFixed(2)
-      : 0,
-    b: Number(balanceData),
-  });
 
   const canSend = Number(amount) <= Number(balance) && Number(amount) > 0;
 
@@ -109,7 +105,7 @@ export default function TransferModal() {
         text1: "Success!",
         text2: "USDC Transfer successful",
       });
-      router.navigate('/app/home');
+      router.navigate("/app/home");
     } catch (error) {
       console.error(error);
       Toast.show({
@@ -138,9 +134,9 @@ export default function TransferModal() {
         <Appbar.Action
           icon={() => <Icon name="close" size={24} color="#FFF" />}
           onPress={() => {
-            console.log('Click??');
-            
-            router.dismiss()
+            console.log("Click??");
+
+            router.dismiss();
           }}
           color="#fff"
           size={20}
