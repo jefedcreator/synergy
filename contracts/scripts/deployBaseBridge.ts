@@ -39,14 +39,13 @@ async function main() {
   //   console.log(`Arbitrum bridge deployed to: ${receiver.address}`);
   console.log(`usdc balance: ${await usdc.read.balanceOf([ownerAddress])}`);
   console.log(`link balance: ${await link.read.balanceOf([ownerAddress])}`);
-  const receiver = "0xe85BbD739229FccD6eC650C8d439Fef6E0092c15";
   //   const tx1 = await owner.sendTransaction({
   //     account: ownerAddress,
   //     to: sender.address,
   //     value: parseEther("0.01"),
   //   });
 
-  const tx1 = await link.write.transfer([sender.address, parseEther("1")]);
+  const tx1 = await link.write.transfer([sender.address, parseEther("10")]);
   await publicClient.waitForTransactionReceipt({ hash: tx1 });
   console.log("done 1");
 
@@ -107,14 +106,14 @@ async function main() {
   // await publicClient.waitForTransactionReceipt({ hash: tx6 });
   // console.log("done 6:", tx6);
 
-  // const tx7 = await sender.write.sendMessagePayLINK([
-  //   opSelector,
-  //   ownerAddress,
-  //   usdcValue,
-  // ]);
+  const tx7 = await sender.write.sendMessagePayLINK([
+    opSelector,
+    ownerAddress,
+    usdcValue,
+  ]);
 
-  // await publicClient.waitForTransactionReceipt({ hash: tx7 });
-  // console.log("done 7:", tx7);
+  await publicClient.waitForTransactionReceipt({ hash: tx7 });
+  console.log("done 7:", tx7);
 
   console.log(
     `sender link balance: ${formatEther(
