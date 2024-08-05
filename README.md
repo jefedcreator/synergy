@@ -1,5 +1,5 @@
 # synergy
-[![Synergy Demo](https://img.youtube.com/vi/hVdLKZ3MHjo/0.jpg)](https://youtu.be/hVdLKZ3MHjo)
+[![Synergy Demo](https://img.youtube.com/vi/rLOpjTuDAhY/0.jpg)](https://youtu.be/rLOpjTuDAhY)
 ## 🌞 Base onchain summer
 
 This project was built during the [Base onchain summer hackathon](https://www.base.org/onchainsummer).
